@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   constructor(private auth: Auth, private http: HttpClient) {}
-
   async googleLogin() {
     try {
       const provider = new GoogleAuthProvider();

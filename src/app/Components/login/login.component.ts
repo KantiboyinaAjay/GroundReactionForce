@@ -2,6 +2,7 @@ import { Component , OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, Validators } from '@angular/forms';
+import Toastify from 'toastify-js';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,10 @@ export class LoginComponent implements OnInit {
     button_text: 'Sign'
   }
 
-  constructor(private http:HttpClient , private authService: AuthService){}
+  constructor(
+    private http:HttpClient ,
+    private authService: AuthService
+  ){}
   ngOnInit(): void {
   }
   Login(email:any , password:any){
@@ -36,11 +40,23 @@ export class LoginComponent implements OnInit {
   forgot(email:any){
     this.http.post('http://127.0.0.1:5000/forgot', {email}).subscribe({
       next: (response)=> {
-        alert('sent reset mail');
         this.method={
           name: 'Sign in',
           button_text: 'Sign'
         }
+        Toastify({
+          text: "✅ Reset mail sent sucessfully.",
+          duration: 5000,
+          close: true,
+          gravity: "top",
+          position: "left",
+          style: {
+            background: "rgb(235, 252, 236)",
+            color: "black",
+            "max-width": "300px", 
+            "text-align": "center",
+          }
+        }).showToast();
       },
       error: (error)=> console.log(error)
     })
@@ -59,7 +75,27 @@ export class LoginComponent implements OnInit {
         error: (error)=> console.log(error)
       })
     }
-    else alert('password and confirm password must be same')
+    else{
+      Toastify({
+        text: "⚠️ Both passwords must be equal.",
+        duration: 5000,
+        close: true,
+        gravity: "top",
+        position: "center",
+        style:{
+          background: "rgb(252, 235, 235)",
+          color: "black",
+          "height": "30px",
+          "max-width": "300px",
+          "text-align": "center",
+          "border-radius": " 8px",
+          "margin": "auto",
+          "margin-top": "5px",
+          "left": "50%",
+          "transform": "translateX(-50%)"
+        }
+      }).showToast();
+    }
   }
 
   googleLogin() {

@@ -4,7 +4,7 @@ import json
 
 import pyrebase
 import firebase_admin
-from firebase_admin import auth, credentials
+from firebase_admin import auth as auth_admin, credentials
 
 from dotenv import load_dotenv
 from flask_cors import CORS
@@ -14,11 +14,11 @@ load_dotenv()
 
 firebase_config = os.getenv('FIREBASE_CONFIG')
 firebase = pyrebase.initialize_app(json.loads(firebase_config))
-# cred = credentials.Certificate(".\grf-project-b6824-firebase-adminsdk-fbsvc-f0b65cb42c.json")
-# firebase_admin.initialize_app(cred)
+cred = credentials.Certificate(r"./grf-project-b6824-firebase-adminsdk-fbsvc-f0b65cb42c.json")
+firebase_admin.initialize_app(cred)
 auth = firebase.auth()
 
-CORS(app, origins=['http://localhost:4200'])
+CORS(app, supports_credentials=True)
 
 @app.route('/' , methods=['POST'])
 def home():
@@ -61,7 +61,7 @@ def forgot():
 def google_auth():
     try:
         id_token = request.json.get('idToken')
-        decoded_token = auth.verify_id_token(id_token)
+        decoded_token = auth_admin.verify_id_token(id_token)
         user_uid = decoded_token['uid']
         email = decoded_token['email']
 
@@ -73,7 +73,7 @@ def google_auth():
 def github_auth():
     try:
         id_token = request.json.get('idToken')
-        decoded_token = auth.verify_id_token(id_token)
+        decoded_token = auth_admin.verify_id_token(id_token)
         user_uid = decoded_token['uid']
         email = decoded_token['email']
 
