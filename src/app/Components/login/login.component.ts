@@ -53,8 +53,14 @@ export class LoginComponent implements OnInit {
           style: {
             background: "rgb(235, 252, 236)",
             color: "black",
-            "max-width": "300px", 
+            "height": "30px",
+            "max-width": "300px",
             "text-align": "center",
+            "border-radius": " 8px",
+            "margin": "auto",
+            "margin-top": "5px",
+            "left": "50%",
+            "transform": "translateX(-50%)"
           }
         }).showToast();
       },
