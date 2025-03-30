@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
           duration: 5000,
           close: true,
           gravity: "top",
-          position: "left",
+          position: "center",
           style: {
             background: "rgb(235, 252, 236)",
             color: "black",
@@ -72,13 +72,51 @@ export class LoginComponent implements OnInit {
     if(password === confirm_password){
       this.http.post('http://127.0.0.1:5000/register', {email , password}).subscribe({
         next: (response)=> {
-          alert('register successful  ')
+          Toastify({
+            text: "✅ sucessfully Registered.",
+            duration: 5000,
+            close: true,
+            gravity: "top",
+            position: "center",
+            style: {
+              background: "rgb(235, 252, 236)",
+              color: "black",
+              "height": "30px",
+              "max-width": "300px",
+              "text-align": "center",
+              "border-radius": " 8px",
+              "margin": "auto",
+              "margin-top": "5px",
+              "left": "50%",
+              "transform": "translateX(-50%)"
+            }
+          }).showToast();
           this.method={
             name: 'Sign in',
             button_text: 'Sign'
           }
         },
-        error: (error)=> console.log(error)
+        error: (error)=> {
+          Toastify({
+            text: "⚠️ User already exists.",
+            duration: 5000,
+            close: true,
+            gravity: "top",
+            position: "center",
+            style:{
+              background: "rgb(252, 235, 235)",
+              color: "black",
+              "height": "30px",
+              "max-width": "300px",
+              "text-align": "center",
+              "border-radius": " 8px",
+              "margin": "auto",
+              "margin-top": "5px",
+              "left": "50%",
+              "transform": "translateX(-50%)"
+            }
+          }).showToast();
+        }
       })
     }
     else{

@@ -31,7 +31,9 @@ def login():
     password = data.get('password')
     try:
         user = auth.sign_in_with_email_and_password(email , password)
-        return jsonify({"message": "Login successful"})
+        decode_token = auth_admin.verify_id_token(user.get('idToken'))
+        print(decode_token)
+        return jsonify(decode_token)
     except:
         return jsonify({"error": "Invalid credentials"})
 
@@ -43,7 +45,9 @@ def register():
     password = data.get('password')
     try:
         user = auth.create_user_with_email_and_password(email , password)
-        return "<h1>register successfull</h1>"
+        decode_token = auth_admin.verify_id_token(user.get('idToken'))
+        print(decode_token)
+        return jsonify(decode_token)
     except:
         return "unable to register now"
 
@@ -62,10 +66,10 @@ def google_auth():
     try:
         id_token = request.json.get('idToken')
         decoded_token = auth_admin.verify_id_token(id_token)
-        user_uid = decoded_token['uid']
-        email = decoded_token['email']
+        # user_uid = decoded_token['uid']
+        # email = decoded_token['email']
 
-        return jsonify({"message": "User authenticated", "uid": user_uid, "email": email})
+        return jsonify(decoded_token)
     except Exception as e:
         return jsonify({"error": str(e)}), 401
     
@@ -74,10 +78,10 @@ def github_auth():
     try:
         id_token = request.json.get('idToken')
         decoded_token = auth_admin.verify_id_token(id_token)
-        user_uid = decoded_token['uid']
-        email = decoded_token['email']
+        # user_uid = decoded_token['uid']
+        # email = decoded_token['email']
 
-        return jsonify({"message": "User authenticated", "uid": user_uid, "email": email})
+        return jsonify(decoded_token    )
     except Exception as e:
         return jsonify({"error": str(e)}), 401
 if __name__ == '__main__':
