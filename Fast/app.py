@@ -158,6 +158,13 @@ def retrieve_predictions():
     user_data = mongo.db.Predictions.find_one({"_id": uid})
     return jsonify(user_data if user_data else {"error": "No data found"})
 
+
+@app.route('/get_session', methods=['GET'])
+def get_session():
+    if 'uid' in session and 'name' in session:
+        return jsonify({"uid": session['uid'], "name": session['name']}), 200
+    return jsonify({"error": "No session found"}), 401
+
 if __name__ == '__main__':
     app.run(debug=True)
 

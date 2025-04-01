@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithPopup, GoogleAuthProvider, signOut, GithubAuthProvider } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -33,6 +34,10 @@ export class AuthService {
       );
     }
     catch{}
+  }
+
+  getSession(): Observable<any> {
+    return this.http.get('http://127.0.0.1:5000/get_session', { withCredentials: true });
   }
 
   logout() {
