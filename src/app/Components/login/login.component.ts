@@ -29,10 +29,16 @@ export class LoginComponent implements OnInit {
     private authService: AuthService
   ){}
   ngOnInit(): void {
+    // console.log(localStorage.getItem('name'))
   }
-  Login(email:any , password:any){
-    this.http.post('http://127.0.0.1:5000/login',{email , password}).subscribe({
-      next: (response) => console.log('Login successful', response),
+  async Login(email:any , password:any){
+    await this.http.post('http://127.0.0.1:5000/login',{email , password}).subscribe({
+      next: (response:any) => {
+        if(this.authService.isLocalStorageAvailable()) {
+          localStorage.setItem('name', response['name'])
+          localStorage.setItem('uid' , response['uid'])
+        }
+      },
       error: (error) => console.error('Login failed', error)
     });
   }
@@ -151,7 +157,6 @@ export class LoginComponent implements OnInit {
   }
 
   logout(){
-    alert("clcick")
     this.authService.logout();
   }
 

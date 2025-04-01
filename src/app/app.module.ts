@@ -1,6 +1,6 @@
-import { NgModule  } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { FormsModule , ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideHttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -12,12 +12,14 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './Components/login/login.component';
 import { environment } from '../Environments/environment';
 import { ButtonComponent } from './baseComponents/button/button.component';
+import { PredictionComponent } from "./Components/prediction/prediction.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ButtonComponent
+    ButtonComponent,
+    PredictionComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +29,6 @@ import { ButtonComponent } from './baseComponents/button/button.component';
     BrowserAnimationsModule
   ],
   providers: [
-    // NgZone,
     provideClientHydration(withEventReplay()),
     provideHttpClient(),
     provideFirebaseApp(() => initializeApp(environment.firebaseConfig)),
