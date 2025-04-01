@@ -1,0 +1,102 @@
+@if(ouput_visible){
+    <div class="flex text-center justify-center">
+        <button class="bg-blue-300 px-3 my-5 hover:bg-blue-600 border-none text-white font-semibold py-2 rounded-md" (click)="ouput_visible = !ouput_visible">
+            New Prediction
+        </button>
+    </div>
+    <div class="flex text-center justify-center text-3xl my-4">
+        <div>
+            <div class="text-center text-3xl my-4">
+                <p>Output</p>
+            </div>
+            <form [formGroup]="output_prediction" class="bg-gray-50 shadow-lg rounded-lg p-8 w-96">
+                <!-- GRF-X -->
+                <div class="flex items-center mb-4">
+                    <label class="block text-gray-700 w-1/3">GRF-X: </label>
+                    <p class="w-2/3 p-2 border border-gray-500 bg-gray-100 rounded-md">
+                        {{output_prediction.get('grfx')?.value}}
+                    </p>
+                </div>
+        
+                <!-- GRF-Y -->
+                <div class="flex items-center mb-4">
+                    <label class="block text-gray-700 w-1/3">GRF-Y: </label>
+                    <p class="w-2/3 p-2 border border-gray-500 bg-gray-100 rounded-md">
+                        {{output_prediction.get('grfy')?.value}}
+                    </p>
+                </div>
+        
+                <!-- GRF-Z -->
+                <div class="flex items-center mb-4">
+                    <label class="block text-gray-700 w-1/3">GRF-Z: </label>
+                    <p class="w-2/3 p-2 border border-gray-500 bg-gray-100 rounded-md">
+                        {{output_prediction.get('grfz')?.value}}
+                    </p>
+                </div>
+        
+            </form>
+        </div>
+    </div>
+}
+@else{
+    <div class="flex items-center justify-center min-h-screen">
+        <div>
+            <div class="text-center text-3xl my-4">
+                <p>Prediction</p>
+            </div>
+            <form [formGroup]="prediction_form" (ngSubmit)="onSubmit()" class="bg-gray-50 shadow-lg rounded-lg  p-8 w-96">
+                <!-- a1 -->
+                <label class="block mb-2 text-gray-700">Acceleration-1: *</label>
+                <input type="text" placeholder="A1" formControlName="a1"
+                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
+                <div *ngIf="prediction_form.get('a1')?.invalid && prediction_form.get('a1')?.touched" class="text-red-500">
+                    Acceleration-1 is required field.
+                </div>
+                
+                <!-- a2 -->
+                <label class="block mb-2 text-gray-700">Acceleration-2: *</label>
+                <input type="text" placeholder="A2" formControlName="a2"
+                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
+                <div *ngIf="prediction_form.get('a2')?.invalid && prediction_form.get('a2')?.touched" class="text-red-500">
+                    Acceleration-2 is required field.
+                </div>
+    
+                <!-- a3 -->
+                <label class="block mb-2 text-gray-700">Acceleration-3: *</label>
+                <input type="text" placeholder="A3"  formControlName="a3"
+                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
+                <div *ngIf="prediction_form.get('a3')?.invalid && prediction_form.get('a3')?.touched" class="text-red-500">
+                    Acceleration-3 is required field.
+                </div>
+    
+                <!-- v1 -->
+                <label class="block mb-2 text-gray-700">Velocity-1: *</label>
+                <input type="text" placeholder="V1" formControlName="v1"
+                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
+                <div *ngIf="prediction_form.get('v1')?.invalid && prediction_form.get('v1')?.touched" class="text-red-500">
+                    Velocity-1 is required field.
+                </div>
+    
+                <!-- v2 -->
+                <label class="block mb-2 text-gray-700">Velocity-2: *</label>
+                <input type="text" placeholder="V2" formControlName="v2"
+                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
+                <div *ngIf="prediction_form.get('v2')?.invalid && prediction_form.get('v2')?.touched" class="text-red-500">
+                    Velocity-2 is required field.
+                </div>
+    
+                <!-- v3 -->
+                <label class="block mb-2 text-gray-700">Velocity-3: *</label>
+                <input type="email" placeholder="V3" formControlName="v3"
+                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
+                <div *ngIf="prediction_form.get('v3')?.invalid && prediction_form.get('v3')?.touched" class="text-red-500">
+                    Velocity-3 is required field.
+                </div>
+    
+                <button [disabled]="!prediction_form.valid" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md">
+                    Submit
+                </button>
+            </form>
+        </div>    
+    </div>
+}

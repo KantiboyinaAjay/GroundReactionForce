@@ -1,11 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable , OnInit } from '@angular/core';
 import { Auth, signInWithPopup, GoogleAuthProvider, signOut, GithubAuthProvider } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class AuthService implements OnInit {
   constructor(private auth: Auth, private http: HttpClient) {}
+  ngOnInit(): void {
+    localStorage.clear();
+  }
   async googleLogin() {
     try {
       const provider = new GoogleAuthProvider();
@@ -14,8 +17,13 @@ export class AuthService {
       console.log('Google User:', result.user);
       console.log('ID Token:', idToken);
 
-      this.http.post('http://127.0.0.1:5000/auth/google', { idToken }).subscribe(
-        (res) => console.log('Backend Response:', res),
+      await this.http.post('http://127.0.0.1:5000/auth/google', { idToken }).subscribe(
+        (res:any) => {
+          if(this.isLocalStorageAvailable()) {
+            localStorage.setItem('name', res['name'])
+            localStorage.setItem('uid', res['uid'])
+          }
+        },
         (err) => console.error('Error:', err)
       );
     }
@@ -28,19 +36,25 @@ export class AuthService {
       const result = await signInWithPopup(this.auth, provider);
       const idToken = await result.user.getIdToken();
 
-      this.http.post('http://127.0.0.1:5000/auth/github', { idToken }).subscribe(
-        (res) => console.log('Backend Response:', res),
+      await this.http.post('http://127.0.0.1:5000/auth/github', { idToken }).subscribe(
+        (res:any) => {
+          if(this.isLocalStorageAvailable()) {
+            localStorage.setItem('name', res['name'])
+            localStorage.setItem('uid', res['uid'])
+          }
+        },
         (err) => console.error('Error:', err)
       );
     }
     catch{}
   }
 
-  getSession(): Observable<any> {
-    return this.http.get('http://127.0.0.1:5000/get_session', { withCredentials: true });
+  public isLocalStorageAvailable(): boolean {
+    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
   }
 
   logout() {
-    return signOut(this.auth);
+    localStorage.clear();
+    this.http.get('http://127.0.0.1:5000/logout')
   }
 }

@@ -1,5 +1,5 @@
 #imports
-from flask import Flask, request, jsonify,session
+from flask import Flask, request, jsonify, session
 import os
 import json
 
@@ -57,14 +57,16 @@ def login():
         decoded_token = auth_admin.verify_id_token(user.get('idToken'))
         email = decoded_token['email'].split("@")
         name = email[0]
-
-        session['uid'] = decoded_token['uid']
-        session['name'] = name
         
-        return jsonify(decoded_token)
+        return jsonify({'name': name,'uid':decoded_token['uid']})
     except Exception as e:
         print(f"Error verifying ID token: {e}")
         return jsonify({"error": str(e)}), 401
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.clear()
+    return jsonify({"message": "Logged out successfully"})
 
 @app.route('/register' , methods=['POST'])
 def register():
@@ -105,7 +107,7 @@ def google_auth():
         name = email[0]
         session['uid'] = decoded_token['uid']
         session['name'] = name
-        return jsonify(decoded_token)
+        return jsonify({'name':name , 'uid':decoded_token['uid']})
     except Exception as e:
         print(f"Error verifying ID token: {e}")
         return jsonify({"error": str(e)}), 401
@@ -119,7 +121,7 @@ def github_auth():
         name = email[0]
         session['uid'] = decoded_token['uid']
         session['name'] = name
-        return jsonify(decoded_token)
+        return jsonify({'name':name , 'uid':decoded_token['uid']})
     except Exception as e:
         print(f"Error verifying ID token: {e}")
         return jsonify({"error": str(e)}), 401
@@ -133,11 +135,12 @@ def prediction():
     v1 = float(data.get('v1'))
     v2 = float(data.get('v2'))
     v3 = float(data.get('v3'))
-    grfx = float(data.get('grfx'))
-    grfy = float(data.get('grfy'))
-    grfz = float(data.get('grfz'))
+    grfx = 22.5
+    grfy = 23.5
+    grfz = 55.5
     uid = data.get('uid')
-    return store_prediction(uid , a1 , a2 , a3 , v1 , v2 , v3 , grfx , grfy , grfz)
+    store_prediction(uid , a1 , a2 , a3 , v1 , v2 , v3 , grfx , grfy , grfz)
+    return jsonify({'grfx': grfx , 'grfy': grfy , 'grfz': grfz})
 
 def store_prediction(uid, a1 , a2 , a3 , v1 , v2 , v3 , grfx , grfy , grfz):
     try:
@@ -158,13 +161,5 @@ def retrieve_predictions():
     user_data = mongo.db.Predictions.find_one({"_id": uid})
     return jsonify(user_data if user_data else {"error": "No data found"})
 
-
-@app.route('/get_session', methods=['GET'])
-def get_session():
-    if 'uid' in session and 'name' in session:
-        return jsonify({"uid": session['uid'], "name": session['name']}), 200
-    return jsonify({"error": "No session found"}), 401
-
 if __name__ == '__main__':
     app.run(debug=True)
-
