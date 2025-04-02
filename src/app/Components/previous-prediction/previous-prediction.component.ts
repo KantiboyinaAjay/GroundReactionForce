@@ -138,7 +138,7 @@ export class PreviousPredictionComponent implements OnInit {
 
   async loadPredictions() {
     let uid = this.auth.isLocalStorageAvailable() ? localStorage.getItem('uid') : ''
-    await this.http.get<any>(`http://127.0.0.1:5000/get_predictions?page=${this.page}&limit=${this.limit}&uid=${uid}`).subscribe(
+    await this.http.get<any>(`http://127.0.0.1:8000/get_predictions?page=${this.page}&limit=${this.limit}&uid=${uid}`).subscribe(
       (res)=> {
         this.predictions = res.paginated_entries
         this.totalPages = res.total

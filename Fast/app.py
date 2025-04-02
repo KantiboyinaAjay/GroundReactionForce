@@ -1,178 +1,133 @@
-#imports
-from flask import Flask, request, jsonify, session
+from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Dict, Any
 import os
 import json
 import math
-
 import pyrebase
 import firebase_admin
-from firebase_admin import auth as auth_admin, credentials , firestore
-
+from firebase_admin import auth as auth_admin, credentials, firestore
 from dotenv import load_dotenv
-from flask_cors import CORS
+from pymongo import MongoClient
 
-from flask_pymongo import PyMongo
-from flask_marshmallow import Marshmallow
-from marshmallow import fields, ValidationError
-#create the Flask instance
-app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY')
 load_dotenv()
+app = FastAPI()
 
-app.config["MONGO_URI"] = "mongodb+srv://ajaykantiboyina:Ajay%406203@cluster0.vleuyp5.mongodb.net/Prediction"
-mongo = PyMongo(app)
-ma = Marshmallow(app)
-#  Define Schema Using Marshmallow
-class PredictionSchema(ma.Schema):
-    input1 = fields.Float(required=True)
-    input2 = fields.Float(required=True)
-    input3 = fields.Float(required=True)
-    prediction = fields.Float(required=True)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-prediction_schema = PredictionSchema()
+mongo_client = MongoClient("mongodb+srv://ajaykantiboyina:Ajay%406203@cluster0.vleuyp5.mongodb.net/Prediction")
+db = mongo_client.Prediction
 
-# firebase auth declarations
-firebase_config = os.getenv('FIREBASE_CONFIG')
-firebase = pyrebase.initialize_app(json.loads(firebase_config))
-
+firebase_config = json.loads(os.getenv("FIREBASE_CONFIG"))
+firebase = pyrebase.initialize_app(firebase_config)
 cred = credentials.Certificate("./grf-project-b6824-firebase-adminsdk-fbsvc-ac4cc9e271.json")
 firebase_admin.initialize_app(cred)
 auth = firebase.auth()
 fire_db = firestore.client()
 
-CORS(app, supports_credentials=True)
+class LoginRequest(BaseModel):
+    email: str
+    password: str
 
-#routes
-@app.route('/' , methods=['POST'])
-def home():
-    return 12
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
 
-@app.route('/login' , methods=['POST'])
-def login():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
+class PredictionRequest(BaseModel):
+    a1: str
+    a2: str
+    a3: str
+    v1: str
+    v2: str
+    v3: str
+    uid: str
+
+# Routes
+@app.post("/login")
+def login(data: LoginRequest):
     try:
-        user = auth.sign_in_with_email_and_password(email , password)
-
-        decoded_token = auth_admin.verify_id_token(user.get('idToken'))
-        email = decoded_token['email'].split("@")
-        name = email[0]
-        
-        return jsonify({'name': name,'uid':decoded_token['uid']})
+        user = auth.sign_in_with_email_and_password(data.email, data.password)
+        decoded_token = auth_admin.verify_id_token(user.get("idToken"))
+        name = decoded_token['email'].split("@")[0]
+        return {"name": name, "uid": decoded_token["uid"]}
     except Exception as e:
-        print(f"Error verifying ID token: {e}")
-        return jsonify({"error": str(e)}), 401
+        raise HTTPException(status_code=401, detail=str(e))
 
-@app.route('/logout', methods=['GET'])
-def logout():
-    session.clear()
-    return jsonify({"message": "Logged out successfully"})
-
-@app.route('/register' , methods=['POST'])
-def register():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
+@app.post("/register")
+def register(data: RegisterRequest):
     try:
-        user = auth.create_user_with_email_and_password(email , password)
-
-        decoded_token = auth_admin.verify_id_token(user.get('idToken'))
-        # email = decoded_token['email'].split("@")
-        # name = email[0]
-
-        # session['uid'] = decoded_token['uid']
-        # session['name'] = name
-        
-        return jsonify(decoded_token)
+        user = auth.create_user_with_email_and_password(data.email, data.password)
+        decoded_token = auth_admin.verify_id_token(user.get("idToken"))
+        return decoded_token
     except Exception as e:
-        print(f"Error verifying ID token: {e}")
-        return jsonify({"error": str(e)}), 401
+        raise HTTPException(status_code=401, detail=str(e))
 
-@app.route('/forgot' , methods=['POST'])
-def forgot():
-    data = request.json
-    email = data.get('email')
+@app.post("/forgot")
+def forgot(data: Dict[str, str]):
     try:
-        user = auth.send_password_reset_email(email)
-        return user
+        auth.send_password_reset_email(data["email"])
+        return {"message": "Password reset email sent"}
     except:
-        return "unable to sent mail now"
-    
-@app.route('/auth/google', methods=['POST'])
-def google_auth():
+        raise HTTPException(status_code=400, detail="Unable to send email")
+
+@app.post("/auth/github")
+async def github_auth(request: Request):
     try:
-        id_token = request.json.get('idToken')
+        body = await request.json()
+        id_token = body["idToken"]
         decoded_token = auth_admin.verify_id_token(id_token)
         email = decoded_token['email'].split("@")
         name = email[0]
-        session['uid'] = decoded_token['uid']
-        session['name'] = name
-        return jsonify({'name':name , 'uid':decoded_token['uid']})
+        return {"name": name, "uid": decoded_token["uid"]}
     except Exception as e:
         print(f"Error verifying ID token: {e}")
-        return jsonify({"error": str(e)}), 401
-    
-@app.route('/auth/github', methods=['POST'])
-def github_auth():
+        raise HTTPException(status_code=401, detail=str(e))
+
+@app.post("/auth/google")
+async def google_auth(request: Request):
     try:
-        id_token = request.json.get('idToken')
+        body = await request.json()
+        id_token = body["idToken"]
         decoded_token = auth_admin.verify_id_token(id_token)
         email = decoded_token['email'].split("@")
         name = email[0]
-        session['uid'] = decoded_token['uid']
-        session['name'] = name
-        return jsonify({'name':name , 'uid':decoded_token['uid']})
+        return {"name": name, "uid": decoded_token["uid"]}
     except Exception as e:
         print(f"Error verifying ID token: {e}")
-        return jsonify({"error": str(e)}), 401
+        raise HTTPException(status_code=401, detail=str(e))
+    
+@app.post("/predict")
+def prediction(data: PredictionRequest):
+    grfx = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a1)
+    grfy = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a2)
+    grfz = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a3)
+    store_prediction(data.uid, float(data.a1), float(data.a2), float(data.a3), float(data.v1), float(data.v2), float(data.v3), grfx, grfy, grfz)
+    return {"grfx": grfx, "grfy": grfy, "grfz": grfz}
 
-@app.route('/predict', methods=['POST'])
-def prediction():
-    data = request.json
-    a1 = float(data.get('a1'))
-    a2 = float(data.get('a2'))
-    a3 = float(data.get('a3'))
-    v1 = float(data.get('v1'))
-    v2 = float(data.get('v2'))
-    v3 = float(data.get('v3'))
-    grfx = (a1 + a2 + a3 + v1 + v2 + v3) / a1
-    grfy = (a1 + a2 + a3 + v1 + v2 + v3) / a2
-    grfz = (a1 + a2 + a3 + v1 + v2 + v3) / a3
-    uid = data.get('uid')
-    store_prediction(uid , a1 , a2 , a3 , v1 , v2 , v3 , grfx , grfy , grfz)
-    return jsonify({'grfx': grfx , 'grfy': grfy , 'grfz': grfz})
+def store_prediction(uid, a1, a2, a3, v1, v2, v3, grfx, grfy, grfz):
+    entry = {"a1": a1, "a2": a2, "a3": a3, "v1": v1, "v2": v2, "v3": v3, "grfx": grfx, "grfy": grfy, "grfz": grfz}
+    db.Predictions.update_one({"_id": uid}, {"$push": {"entries": entry}}, upsert=True)
 
-def store_prediction(uid, a1 , a2 , a3 , v1 , v2 , v3 , grfx , grfy , grfz):
-    try:
-        entry = {"a1": a1, "a2": a2, "a3": a3, "v1":v1 , "v2":v2 , "v3":v3 , "grfx": grfx , "grfy":grfy , "grfz":grfz}
-        mongo.db.Predictions.update_one(
-            {"_id": uid},
-            {"$push": {"entries": entry}},
-            upsert=True
-        )
-        return jsonify({"message": "Data stored successfully"}), 201
-    except ValidationError as err:
-        return jsonify({"error": err.messages}), 400
-
-@app.route('/get_predictions', methods=['GET'])
-def retrieve_predictions():
-
-    page = int(request.args.get('page'))
-    limit = int(request.args.get('limit'))
-    uid = request.args.get('uid')
-
-    document = mongo.db.Predictions.find_one({"_id": uid})
+@app.get("/get_predictions")
+def retrieve_predictions(request: Request):
+    page = int(request.query_params.get("page"))
+    limit = int(request.query_params.get("limit"))
+    uid = request.query_params.get("uid")
+    document = db.Predictions.find_one({"_id": uid})
     if not document:
-        return jsonify({"error": "No data found"}), 404
+        raise HTTPException(status_code=404, detail="No data found")
     
-    entries = document.get("entries")
+    entries = document.get("entries", [])
     total = math.ceil(len(entries) / limit)
     start = (page - 1) * limit
     end = start + limit
     paginated_entries = entries[start:end]
-
-    return jsonify({'start': start , 'end':end , 'total':total , 'paginated_entries':paginated_entries , 'entries':entries})
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    
+    return {"start": start, "end": end, "total": total, "paginated_entries": paginated_entries, "entries": entries}

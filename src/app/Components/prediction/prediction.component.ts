@@ -115,7 +115,7 @@ export class PredictionComponent implements OnInit {
           uid: localStorage.getItem('uid')
         });
       }
-      this.http.post('http://127.0.0.1:5000/predict', this.prediction_form.value).subscribe({
+      this.http.post('http://127.0.0.1:8000/predict', this.prediction_form.value).subscribe({
         next: (response:any) => {
           this.output_prediction.patchValue({
             grfx: response['grfx'].toFixed(4),
