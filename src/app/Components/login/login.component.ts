@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     // console.log(localStorage.getItem('name'))
   }
   async Login(email:any , password:any){
-    await this.http.post('http://127.0.0.1:5000/login',{email , password}).subscribe({
+    this.http.post('http://127.0.0.1:8000/login',{email , password}).subscribe({
       next: (response:any) => {
         if(this.authService.isLocalStorageAvailable()) {
           localStorage.setItem('name', response['name'])
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   }
 
   forgot(email:any){
-    this.http.post('http://127.0.0.1:5000/forgot', {email}).subscribe({
+    this.http.post('http://127.0.0.1:8000/forgot', {email}).subscribe({
       next: (response)=> {
         this.method={
           name: 'Sign in',
@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit {
 
   register(email:any , password:any , confirm_password:any){
     if(password === confirm_password){
-      this.http.post('http://127.0.0.1:5000/register', {email , password}).subscribe({
+      this.http.post('http://127.0.0.1:8000/register', {email , password}).subscribe({
         next: (response)=> {
           Toastify({
             text: "✅ sucessfully Registered.",

@@ -1,7 +1,6 @@
 import { Injectable , OnInit } from '@angular/core';
 import { Auth, signInWithPopup, GoogleAuthProvider, signOut, GithubAuthProvider } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService implements OnInit {
@@ -17,7 +16,7 @@ export class AuthService implements OnInit {
       console.log('Google User:', result.user);
       console.log('ID Token:', idToken);
 
-      await this.http.post('http://127.0.0.1:5000/auth/google', { idToken }).subscribe(
+      await this.http.post('http://127.0.0.1:8000/auth/google', { idToken }).subscribe(
         (res:any) => {
           if(this.isLocalStorageAvailable()) {
             localStorage.setItem('name', res['name'])
@@ -36,7 +35,7 @@ export class AuthService implements OnInit {
       const result = await signInWithPopup(this.auth, provider);
       const idToken = await result.user.getIdToken();
 
-      await this.http.post('http://127.0.0.1:5000/auth/github', { idToken }).subscribe(
+      await this.http.post('http://127.0.0.1:8000/auth/github', { idToken }).subscribe(
         (res:any) => {
           if(this.isLocalStorageAvailable()) {
             localStorage.setItem('name', res['name'])
@@ -55,6 +54,6 @@ export class AuthService implements OnInit {
 
   logout() {
     localStorage.clear();
-    this.http.get('http://127.0.0.1:5000/logout')
+    this.http.get('http://127.0.0.1:8000/logout')
   }
 }

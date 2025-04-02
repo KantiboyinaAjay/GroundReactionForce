@@ -1,5 +1,5 @@
 import { Component , OnInit } from '@angular/core';
-import { FormBuilder , FormControlName, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder , FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 
@@ -21,6 +21,15 @@ export class PredictionComponent implements OnInit {
     private http: HttpClient
   ){}
 
+  line_chartData: any;
+  line_chartOptions: any;
+
+  pie_chartData: any;
+  pie_chartOptions:any;
+
+  polar_chartData: any;
+  polar_chartOptions: any;
+
   ngOnInit(): void {
     this.prediction_form = this.fb.group({
       a1: ['', Validators.required],
@@ -37,6 +46,66 @@ export class PredictionComponent implements OnInit {
       grfy: [''],
       grfz: ['']
     })
+
+    this.line_chartData = {
+      labels: ['GRF-X' , 'GRF-Y' , 'GRF-Z'],
+      datasets: [
+        {
+          label: '',
+          data: [0, 0, 0],
+          borderColor: '#42A5F5',
+          fill: false
+        }
+      ]
+    };
+
+    this.pie_chartData = {
+      labels: ['GRF-X' , 'GRF-Y' , 'GRF-Z'],
+      datasets: [
+        {
+          data: [0 , 0 , 0],
+          backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726'],
+          hoverBackgroundColor: ['#64B5F6', '#81C784', '#FFB74D']
+        }
+      ]
+    };
+
+    this.line_chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false
+    };
+
+    this.pie_chartOptions = {
+      responsive: true,
+      plugins: {
+        legend: {
+          labels: {
+            color: '#495057'
+          }
+        }
+      }
+    }
+
+    this.polar_chartData = {
+      labels: ['GRF-X' , 'GRF-Y' , 'GRF-Z'],
+      datasets: [
+        {
+          label: 'GRF',
+          data: [0 , 0 , 0],
+          backgroundColor: ['#42A5F5' , '#FFA726' , '#66BB6A'],
+        },
+      ]
+    };
+
+    this.polar_chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top'
+        }
+      }
+    };
   }
   onSubmit(): void {
     if (this.prediction_form.valid) {
@@ -46,13 +115,17 @@ export class PredictionComponent implements OnInit {
           uid: localStorage.getItem('uid')
         });
       }
-      this.http.post('http://127.0.0.1:5000/predict', this.prediction_form.value).subscribe({
+      this.http.post('http://127.0.0.1:8000/predict', this.prediction_form.value).subscribe({
         next: (response:any) => {
           this.output_prediction.patchValue({
-            grfx: response['grfx'],
-            grfy: response['grfy'],
-            grfz: response['grfz']
+            grfx: response['grfx'].toFixed(4),
+            grfy: response['grfy'].toFixed(4),
+            grfz: response['grfz'].toFixed(4)
           })
+
+          this.line_chartData.datasets[0].data = [response['grfx'].toFixed(4) , response['grfy'].toFixed(4) , response['grfz'].toFixed(4)]
+          this.pie_chartData.datasets[0].data = [response['grfx'].toFixed(4) , response['grfy'].toFixed(4) , response['grfz'].toFixed(4)]
+          this.polar_chartData.datasets[0].data = [response['grfx'].toFixed(4) , response['grfy'].toFixed(4) , response['grfz'].toFixed(4)]
           this.ouput_visible = true;
         },
         error: (error) => console.error('error : ', error)
