@@ -1,7 +1,6 @@
 import { Injectable , OnInit } from '@angular/core';
 import { Auth, signInWithPopup, GoogleAuthProvider, signOut, GithubAuthProvider } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService implements OnInit {

@@ -46,18 +46,18 @@
             @switch(method.button_text)
             {
                 @case ('Create a new account') {
-                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md" [disabled]="email.invalid || password.invalid || confirm_password.invalid" 
+                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md cursor-pointer" [disabled]="email.invalid || password.invalid || confirm_password.invalid" 
                         (click)="register(email.value , password.value , confirm_password.value)">
                         {{method.button_text}}
                     </button>
                 }
                 @case ('Reset my password') {
-                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md" [disabled]="email.invalid" (click)="forgot(email.value)">
+                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md cursor-pointer" [disabled]="email.invalid" (click)="forgot(email.value)">
                         {{method.button_text}}
                     </button>
                 }
                 @case ('Sign') {
-                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md" [disabled]="email.invalid || password.invalid" (click)="Login(email.value , password.value)">
+                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md cursor-pointer" [disabled]="email.invalid || password.invalid" (click)="Login(email.value , password.value)">
                         {{method.button_text}}
                     </button>
                 }
@@ -69,7 +69,7 @@
         </form>
     
         <div class="text-center my-4" *ngIf="method.name === 'Sign in'">
-            <button class="w-full border py-2 rounded-md text-gray-700 hover:bg-gray-200" (click)="signup()">
+            <button class="w-full border py-2 rounded-md text-gray-700 cursor-pointer hover:bg-gray-200" (click)="signup()">
                 Create a new account
             </button>
         </div>
@@ -82,11 +82,11 @@
         <div *ngIf="method.name !== 'Forgot'" class="text-center text-gray-500 mb-2">or</div>
     
         @if(method.name !== 'Forgot'){
-            <button class="w-full flex items-center justify-center border py-2 rounded-md hover:bg-gray-200 mb-2" (click)="googleLogin()">
+            <button class="w-full flex items-center justify-center border py-2 rounded-md cursor-pointer hover:bg-gray-200 mb-2" (click)="googleLogin()">
                 <img src="assets/google.svg" class="mr-2 w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7">&nbsp; Login with Google
             </button>
         
-            <button class="w-full flex items-center justify-center border py-2 rounded-md hover:bg-gray-200" (click)="githubLogin()">
+            <button class="w-full flex items-center justify-center border py-2 rounded-md cursor-pointer hover:bg-gray-200" (click)="githubLogin()">
                 <img src="assets/github.svg" class="mr-2 w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7">&nbsp; Login with Github
             </button>
         }

@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     // console.log(localStorage.getItem('name'))
   }
   async Login(email:any , password:any){
-    await this.http.post('http://127.0.0.1:5000/login',{email , password}).subscribe({
+    this.http.post('http://127.0.0.1:5000/login',{email , password}).subscribe({
       next: (response:any) => {
         if(this.authService.isLocalStorageAvailable()) {
           localStorage.setItem('name', response['name'])

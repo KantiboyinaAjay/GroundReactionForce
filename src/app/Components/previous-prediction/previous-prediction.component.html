@@ -1,0 +1,90 @@
+<div class="bg-white border border-gray-50 shadow-lg rounded-lg p-6 w-full max-w-4xl mx-auto my-4">
+    <h3 class="flex justify-center text-lg font-semibold text-gray-800 mb-4">Previous Predictions</h3>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th rowspan="2" class="px-4 py-2 border border-gray-400">S NO</th>
+                    <th colspan="3" class="px-4 py-2 border border-gray-400 text-center">Acceleration</th>
+                    <th colspan="3" class="px-4 py-2 border border-gray-400 text-center">Velocity</th>
+                    <th colspan="3" class="px-4 py-2 border border-gray-400 text-center">Result</th>
+                </tr>
+                <tr class="bg-gray-100">
+                    <th class="px-4 py-2 border border-gray-400">X-Axis</th>
+                    <th class="px-4 py-2 border border-gray-400">Y-Axis</th>
+                    <th class="px-4 py-2 border border-gray-400">Z-Axis</th>
+                    <th class="px-4 py-2 border border-gray-400">X-Axis</th>
+                    <th class="px-4 py-2 border border-gray-400">Y-Axis</th>
+                    <th class="px-4 py-2 border border-gray-400">Z-Axis</th>
+                    <th class="px-4 py-2 border border-gray-400">GRF-X</th>
+                    <th class="px-4 py-2 border border-gray-400">GRF-Y</th>
+                    <th class="px-4 py-2 border border-gray-400">GRF-Z</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pred of predictions; let i = index" class="border-t">
+                    <td class="px-4 py-2 border border-gray-400">{{ (page - 1) * limit + i + 1 }}</td>
+                    <td class="px-4 py-2 border border-gray-400">{{ pred.a1 }}</td>
+                    <td class="px-4 py-2 border border-gray-400">{{ pred.a2 }}</td>
+                    <td class="px-4 py-2 border border-gray-400">{{ pred.a3 }}</td>
+                    <td class="px-4 py-2 border border-gray-400">{{ pred.v1 }}</td>
+                    <td class="px-4 py-2 border border-gray-400">{{ pred.v2 }}</td>
+                    <td class="px-4 py-2 border border-gray-400">{{ pred.v3 }}</td>
+                    <td class="px-4 py-2 font-semibold text-blue-600 border border-gray-400">{{ pred.grfx.toFixed(4) }}</td>
+                    <td class="px-4 py-2 font-semibold text-blue-600 border border-gray-400">{{ pred.grfy.toFixed(4) }}</td>
+                    <td class="px-4 py-2 font-semibold text-blue-600 border border-gray-400">{{ pred.grfz.toFixed(4) }}</td>
+                </tr>
+            </tbody>
+        </table>
+              
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="flex justify-between items-center mt-4">
+        <button (click)="prevPage()" [disabled]="page === 1"
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded cursor-pointer">
+            Previous
+        </button>
+    
+        <span class="text-gray-700">Page {{ page }} of {{ totalPages }}</span>
+    
+        <button (click)="nextPage()" [disabled]="page >= totalPages"
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded cursor-pointer">
+            Next
+        </button>
+    </div>   
+</div>
+
+<div class="flex items-center justify-evenly">
+    <div class="my-5">
+        <h3 class="flex justify-center text-lg font-semibold text-gray-800 mb-4">Line Chart</h3>
+        <div>
+            <p-chart type="line" [data]="line_chartData" [options]="line_chartOptions" style="height: 400px; width: 500px;"></p-chart>
+        </div>
+    </div>
+
+    <div class="my-5">
+        <h3 class="flex justify-center text-lg font-semibold text-gray-800 mb-4">Pie Chart</h3>
+        <div>
+            <p-chart type="pie" [data]="pie_chartData" [options]="pie_chartOptions" style="height: 400px"></p-chart>
+        </div>
+    </div>
+</div>
+
+<div class="flex items-center justify-evenly">
+    <div class="my-5">
+        <h3 class="flex justify-center text-lg font-semibold text-gray-800 mb-4">PolarArea Chart</h3>
+        <div>
+            <p-chart type="polarArea" [data]="polar_chartData" [options]="polar_chartOptions" style="height: 400px; width: 500px;"></p-chart>
+        </div>
+    </div>
+
+    <div class="my-5">
+        <h3 class="flex justify-center text-lg font-semibold text-gray-800 mb-4">Bar Chart</h3>
+        <div>
+            <p-chart type="bar" [data]="bar_chartData" [options]="bar_chartOptions" style="height: 400px"></p-chart>
+        </div>
+    </div>
+</div>  

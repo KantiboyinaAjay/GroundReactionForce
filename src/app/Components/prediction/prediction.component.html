@@ -7,7 +7,7 @@
     <div class="flex text-center justify-center text-3xl my-4">
         <div>
             <div class="text-center text-3xl my-4">
-                <p>Output</p>
+                <p>Prediction results</p>
             </div>
             <form [formGroup]="output_prediction" class="bg-gray-50 shadow-lg rounded-lg p-8 w-96">
                 <!-- GRF-X -->
@@ -37,66 +37,63 @@
             </form>
         </div>
     </div>
+
+    <div class="flex justify-center items-center w-full mb-0">
+        <div class="w-3/4">
+            <h3 class="flex justify-center text-lg font-semibold text-gray-800">Line Chart</h3>
+            <div class="flex justify-center">
+                <p-chart type="line" [data]="line_chartData" [options]="line_chartOptions" style="height: 200px; width: 500px;"></p-chart>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-evenly mt-0 mb-4">
+        <div>
+            <h3 class="flex justify-center text-lg font-semibold text-gray-800 mb-4">PolarArea Chart</h3>
+            <div>
+                <p-chart type="polarArea" [data]="polar_chartData" [options]="polar_chartOptions" style="height: 400px; width: 500px;"></p-chart>
+            </div>
+        </div>
+        <div>
+            <h3 class="flex justify-center text-lg font-semibold text-gray-800 mb-4">Pie Chart</h3>
+            <div>
+                <p-chart type="pie" [data]="pie_chartData" [options]="pie_chartOptions" style="height: 400px;"></p-chart>
+            </div>
+        </div>
+    </div>
 }
 @else{
     <div class="flex items-center justify-center min-h-screen">
-        <div>
-            <div class="text-center text-3xl my-4">
-                <p>Prediction</p>
+        <div class="w-full max-w-md">
+          <h2 class="text-center text-2xl font-semibold mb-6">Enter IMU Data</h2>
+      
+          <form [formGroup]="prediction_form" (ngSubmit)="onSubmit()" class="bg-gray-50 shadow-lg rounded-lg p-6 border">
+            <!-- Acceleration Inputs -->
+            <div class="mb-4">
+              <label class="block font-medium">Acceleration (m/s²)</label>
+              <div class="grid grid-cols-3 gap-2 mt-2">
+                <input formControlName="a1" type="text" placeholder="X-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
+                <input formControlName="a2" type="text" placeholder="Y-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
+                <input formControlName="a3" type="text" placeholder="Z-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
+              </div>
             </div>
-            <form [formGroup]="prediction_form" (ngSubmit)="onSubmit()" class="bg-gray-50 shadow-lg rounded-lg  p-8 w-96">
-                <!-- a1 -->
-                <label class="block mb-2 text-gray-700">Acceleration-1: *</label>
-                <input type="text" placeholder="A1" formControlName="a1"
-                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
-                <div *ngIf="prediction_form.get('a1')?.invalid && prediction_form.get('a1')?.touched" class="text-red-500">
-                    Acceleration-1 is required field.
-                </div>
-                
-                <!-- a2 -->
-                <label class="block mb-2 text-gray-700">Acceleration-2: *</label>
-                <input type="text" placeholder="A2" formControlName="a2"
-                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
-                <div *ngIf="prediction_form.get('a2')?.invalid && prediction_form.get('a2')?.touched" class="text-red-500">
-                    Acceleration-2 is required field.
-                </div>
-    
-                <!-- a3 -->
-                <label class="block mb-2 text-gray-700">Acceleration-3: *</label>
-                <input type="text" placeholder="A3"  formControlName="a3"
-                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
-                <div *ngIf="prediction_form.get('a3')?.invalid && prediction_form.get('a3')?.touched" class="text-red-500">
-                    Acceleration-3 is required field.
-                </div>
-    
-                <!-- v1 -->
-                <label class="block mb-2 text-gray-700">Velocity-1: *</label>
-                <input type="text" placeholder="V1" formControlName="v1"
-                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
-                <div *ngIf="prediction_form.get('v1')?.invalid && prediction_form.get('v1')?.touched" class="text-red-500">
-                    Velocity-1 is required field.
-                </div>
-    
-                <!-- v2 -->
-                <label class="block mb-2 text-gray-700">Velocity-2: *</label>
-                <input type="text" placeholder="V2" formControlName="v2"
-                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
-                <div *ngIf="prediction_form.get('v2')?.invalid && prediction_form.get('v2')?.touched" class="text-red-500">
-                    Velocity-2 is required field.
-                </div>
-    
-                <!-- v3 -->
-                <label class="block mb-2 text-gray-700">Velocity-3: *</label>
-                <input type="email" placeholder="V3" formControlName="v3"
-                    class="w-full p-2 border rounded-md focus:outline-blue-500 mb-4">
-                <div *ngIf="prediction_form.get('v3')?.invalid && prediction_form.get('v3')?.touched" class="text-red-500">
-                    Velocity-3 is required field.
-                </div>
-    
-                <button [disabled]="!prediction_form.valid" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md">
-                    Submit
-                </button>
-            </form>
-        </div>    
-    </div>
+      
+            <!-- Angular Velocity Inputs -->
+            <div class="mb-4">
+              <label class="block font-medium">Angular Velocity (rad/s)</label>
+              <div class="grid grid-cols-3 gap-2 mt-2">
+                <input formControlName="v1" type="text" placeholder="X-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
+                <input formControlName="v2" type="text" placeholder="Y-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
+                <input formControlName="v3" type="text" placeholder="Z-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
+              </div>
+            </div>
+      
+            <!-- Submit Button -->
+            <button [disabled]="!prediction_form.valid" class="w-full bg-blue-600 px-3 my-5 hover:bg-blue-300 border-none text-white font-semibold py-2 rounded-md cursor-pointer transition">
+              Predict GRF
+            </button>
+          </form>
+        </div>
+      </div>
+      
 }

@@ -2,6 +2,7 @@
 from flask import Flask, request, jsonify, session
 import os
 import json
+import math
 
 import pyrebase
 import firebase_admin
@@ -135,16 +136,16 @@ def prediction():
     v1 = float(data.get('v1'))
     v2 = float(data.get('v2'))
     v3 = float(data.get('v3'))
-    grfx = 22.5
-    grfy = 23.5
-    grfz = 55.5
+    grfx = (a1 + a2 + a3 + v1 + v2 + v3) / a1
+    grfy = (a1 + a2 + a3 + v1 + v2 + v3) / a2
+    grfz = (a1 + a2 + a3 + v1 + v2 + v3) / a3
     uid = data.get('uid')
     store_prediction(uid , a1 , a2 , a3 , v1 , v2 , v3 , grfx , grfy , grfz)
     return jsonify({'grfx': grfx , 'grfy': grfy , 'grfz': grfz})
 
 def store_prediction(uid, a1 , a2 , a3 , v1 , v2 , v3 , grfx , grfy , grfz):
     try:
-        entry = {"a1": a1, "a2": a2, "a": a3, "v1":v1 , "v2":v2 , "v3":v3 , "grfx": grfx , "grfy":grfy , "grfz":grfz}
+        entry = {"a1": a1, "a2": a2, "a3": a3, "v1":v1 , "v2":v2 , "v3":v3 , "grfx": grfx , "grfy":grfy , "grfz":grfz}
         mongo.db.Predictions.update_one(
             {"_id": uid},
             {"$push": {"entries": entry}},
@@ -156,10 +157,22 @@ def store_prediction(uid, a1 , a2 , a3 , v1 , v2 , v3 , grfx , grfy , grfz):
 
 @app.route('/get_predictions', methods=['GET'])
 def retrieve_predictions():
-    data = request.json
-    uid = data.get('uid')
-    user_data = mongo.db.Predictions.find_one({"_id": uid})
-    return jsonify(user_data if user_data else {"error": "No data found"})
+
+    page = int(request.args.get('page'))
+    limit = int(request.args.get('limit'))
+    uid = request.args.get('uid')
+
+    document = mongo.db.Predictions.find_one({"_id": uid})
+    if not document:
+        return jsonify({"error": "No data found"}), 404
+    
+    entries = document.get("entries")
+    total = math.ceil(len(entries) / limit)
+    start = (page - 1) * limit
+    end = start + limit
+    paginated_entries = entries[start:end]
+
+    return jsonify({'start': start , 'end':end , 'total':total , 'paginated_entries':paginated_entries , 'entries':entries})
 
 if __name__ == '__main__':
     app.run(debug=True)
