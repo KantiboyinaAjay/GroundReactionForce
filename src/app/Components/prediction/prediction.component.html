@@ -1,99 +1,107 @@
-@if(ouput_visible){
-    <div class="flex text-center justify-center">
-        <button class="bg-blue-300 px-3 my-5 hover:bg-blue-600 border-none text-white font-semibold py-2 rounded-md" (click)="ouput_visible = !ouput_visible">
-            New Prediction
-        </button>
-    </div>
-    <div class="flex text-center justify-center text-3xl my-4">
-        <div>
-            <div class="text-center text-3xl my-4">
-                <p>Prediction results</p>
-            </div>
-            <form [formGroup]="output_prediction" class="bg-gray-50 shadow-lg rounded-lg p-8 w-96">
-                <!-- GRF-X -->
-                <div class="flex items-center mb-4">
-                    <label class="block text-gray-700 w-1/3">GRF-X: </label>
-                    <p class="w-2/3 p-2 border border-gray-500 bg-gray-100 rounded-md">
-                        {{output_prediction.get('grfx')?.value}}
-                    </p>
-                </div>
-        
-                <!-- GRF-Y -->
-                <div class="flex items-center mb-4">
-                    <label class="block text-gray-700 w-1/3">GRF-Y: </label>
-                    <p class="w-2/3 p-2 border border-gray-500 bg-gray-100 rounded-md">
-                        {{output_prediction.get('grfy')?.value}}
-                    </p>
-                </div>
-        
-                <!-- GRF-Z -->
-                <div class="flex items-center mb-4">
-                    <label class="block text-gray-700 w-1/3">GRF-Z: </label>
-                    <p class="w-2/3 p-2 border border-gray-500 bg-gray-100 rounded-md">
-                        {{output_prediction.get('grfz')?.value}}
-                    </p>
-                </div>
-        
-            </form>
-        </div>
-    </div>
+<app-navbar></app-navbar>
 
-    <div class="flex justify-center items-center w-full mb-0">
-        <div class="w-3/4">
-            <h3 class="flex justify-center text-lg font-semibold text-gray-800">Line Chart</h3>
-            <div class="flex justify-center">
-                <p-chart type="line" [data]="line_chartData" [options]="line_chartOptions" style="height: 200px; width: 500px;"></p-chart>
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4">
+    <div class="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6 my-2">
+        
+        <!-- User Not Logged In -->
+        @if (!islogin) {
+            <div class="flex flex-col items-center text-center py-8">
+                <img src="assets/login.svg" alt="Login Required" class="w-40 md:w-52 mb-6">
+                <p class="text-gray-600 text-base md:text-lg">
+                    Oops! It looks like you haven't logged in. Please login to predict GRF.
+                </p>
+                <button class="mt-5 px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-400 transition cursor-pointer"
+                    routerLink="/login">
+                    Login
+                </button>
             </div>
-        </div>
-    </div>
+        }
 
-    <div class="flex justify-evenly mt-0 mb-4">
-        <div>
-            <h3 class="flex justify-center text-lg font-semibold text-gray-800 mb-4">PolarArea Chart</h3>
-            <div>
-                <p-chart type="polarArea" [data]="polar_chartData" [options]="polar_chartOptions" style="height: 400px; width: 500px;"></p-chart>
-            </div>
-        </div>
-        <div>
-            <h3 class="flex justify-center text-lg font-semibold text-gray-800 mb-4">Pie Chart</h3>
-            <div>
-                <p-chart type="pie" [data]="pie_chartData" [options]="pie_chartOptions" style="height: 400px;"></p-chart>
-            </div>
-        </div>
+        <!-- Prediction Results -->
+        @else {
+            @if (ouput_visible) {
+                <div class="flex flex-col items-center my-2">
+                    <button class="bg-blue-500 px-4 py-2 my-4 text-white rounded-lg shadow-md hover:bg-blue-400 transition cursor-pointer"
+                        (click)="ouput_visible = !ouput_visible">
+                        New Prediction
+                    </button>
+                    <h2 class="text-xl font-semibold text-gray-800 mt-4">Prediction Results</h2>
+                    <form [formGroup]="output_prediction" class="bg-gray-50 shadow-md rounded-lg p-6 mt-4 w-full">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block font-medium text-gray-700">GRF-X</label>
+                                <p class="p-3 border border-gray-400 bg-gray-100 rounded-md">{{output_prediction.get('grfx')?.value}}</p>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-gray-700">GRF-Y</label>
+                                <p class="p-3 border border-gray-400 bg-gray-100 rounded-md">{{output_prediction.get('grfy')?.value}}</p>
+                            </div>
+                            <div>
+                                <label class="block font-medium text-gray-700">GRF-Z</label>
+                                <p class="p-3 border border-gray-400 bg-gray-100 rounded-md">{{output_prediction.get('grfz')?.value}}</p>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Charts -->
+                    <div class="w-full mt-6">
+                        <h3 class="text-center text-lg font-semibold text-gray-800 mb-4">Visualization</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-2">
+                                <h3 class="text-center text-gray-800 font-medium mb-2">Line Chart</h3>
+                                <p-chart type="line" [data]="line_chartData" [options]="line_chartOptions" class="h-60 w-full"></p-chart>
+                            </div>
+                            <div>
+                                <h3 class="text-center text-gray-800 font-medium mb-2">Pie Chart</h3>
+                                <p-chart type="pie" [data]="pie_chartData" [options]="pie_chartOptions" class="h-60 w-full"></p-chart>
+                            </div>
+                            <div>
+                                <h3 class="text-center text-gray-800 font-medium mb-2">Polar Area Chart</h3>
+                                <p-chart type="polarArea" [data]="polar_chartData" [options]="polar_chartOptions" class="h-60 w-full"></p-chart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @else {
+                <div class="flex flex-col items-center">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Enter IMU Data</h2>
+                    <form [formGroup]="prediction_form" (ngSubmit)="onSubmit()" class="bg-white shadow-lg rounded-lg p-6 w-full">
+                        
+                        <!-- Acceleration Inputs -->
+                        <div class="mb-4">
+                            <label class="block font-medium text-gray-700">Acceleration (m/s²)</label>
+                            <div class="grid grid-cols-3 gap-4 mt-2">
+                                <input formControlName="a1" type="text" placeholder="X-Axis"
+                                    class="border border-gray-400 rounded-md px-3 py-2 focus:ring focus:ring-indigo-300">
+                                <input formControlName="a2" type="text" placeholder="Y-Axis"
+                                    class="border border-gray-400 rounded-md px-3 py-2 focus:ring focus:ring-indigo-300">
+                                <input formControlName="a3" type="text" placeholder="Z-Axis"
+                                    class="border border-gray-400 rounded-md px-3 py-2 focus:ring focus:ring-indigo-300">
+                            </div>
+                        </div>
+
+                        <!-- Angular Velocity Inputs -->
+                        <div class="mb-4">
+                            <label class="block font-medium text-gray-700">Angular Velocity (rad/s)</label>
+                            <div class="grid grid-cols-3 gap-4 mt-2">
+                                <input formControlName="v1" type="text" placeholder="X-Axis"
+                                    class="border border-gray-400 rounded-md px-3 py-2 focus:ring focus:ring-indigo-300">
+                                <input formControlName="v2" type="text" placeholder="Y-Axis"
+                                    class="border border-gray-400 rounded-md px-3 py-2 focus:ring focus:ring-indigo-300">
+                                <input formControlName="v3" type="text" placeholder="Z-Axis"
+                                    class="border border-gray-400 rounded-md px-3 py-2 focus:ring focus:ring-indigo-300">
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button [disabled]="!prediction_form.valid"
+                            class="w-full bg-indigo-600 text-white px-4 py-3 rounded-md shadow-md hover:bg-indigo-400 transition cursor-pointer">
+                            Predict GRF
+                        </button>
+                    </form>
+                </div>
+            }
+        }
     </div>
-}
-@else{
-    <div class="flex items-center justify-center min-h-screen">
-        <div class="w-full max-w-md">
-          <h2 class="text-center text-2xl font-semibold mb-6">Enter IMU Data</h2>
-      
-          <form [formGroup]="prediction_form" (ngSubmit)="onSubmit()" class="bg-gray-50 shadow-lg rounded-lg p-6 border">
-            <!-- Acceleration Inputs -->
-            <div class="mb-4">
-              <label class="block font-medium">Acceleration (m/s²)</label>
-              <div class="grid grid-cols-3 gap-2 mt-2">
-                <input formControlName="a1" type="text" placeholder="X-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
-                <input formControlName="a2" type="text" placeholder="Y-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
-                <input formControlName="a3" type="text" placeholder="Z-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
-              </div>
-            </div>
-      
-            <!-- Angular Velocity Inputs -->
-            <div class="mb-4">
-              <label class="block font-medium">Angular Velocity (rad/s)</label>
-              <div class="grid grid-cols-3 gap-2 mt-2">
-                <input formControlName="v1" type="text" placeholder="X-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
-                <input formControlName="v2" type="text" placeholder="Y-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
-                <input formControlName="v3" type="text" placeholder="Z-Axis" class="h-4/5 border border-gray-400 rounded-md focus:outline-blue-500 mb-4">
-              </div>
-            </div>
-      
-            <!-- Submit Button -->
-            <button [disabled]="!prediction_form.valid" class="w-full bg-blue-600 px-3 my-5 hover:bg-blue-300 border-none text-white font-semibold py-2 rounded-md cursor-pointer transition">
-              Predict GRF
-            </button>
-          </form>
-        </div>
-      </div>
-      
-}
+</div>

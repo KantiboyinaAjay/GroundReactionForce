@@ -1,10 +1,11 @@
 import { Injectable , OnInit } from '@angular/core';
 import { Auth, signInWithPopup, GoogleAuthProvider, signOut, GithubAuthProvider } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService implements OnInit {
-  constructor(private auth: Auth, private http: HttpClient) {}
+  constructor(private auth: Auth, private http: HttpClient , private route: Router) {}
   ngOnInit(): void {
     localStorage.clear();
   }
@@ -21,6 +22,11 @@ export class AuthService implements OnInit {
           if(this.isLocalStorageAvailable()) {
             localStorage.setItem('name', res['name'])
             localStorage.setItem('uid', res['uid'])
+            localStorage.setItem('islogin', JSON.stringify(true))
+
+            this.route.navigate(['/home']).then(() => {
+              window.location.reload();
+            });
           }
         },
         (err) => console.error('Error:', err)
@@ -40,6 +46,11 @@ export class AuthService implements OnInit {
           if(this.isLocalStorageAvailable()) {
             localStorage.setItem('name', res['name'])
             localStorage.setItem('uid', res['uid'])
+            localStorage.setItem('islogin', JSON.stringify(true))
+
+            this.route.navigate(['/home']).then(() => {
+              window.location.reload();
+            });
           }
         },
         (err) => console.error('Error:', err)
@@ -50,10 +61,5 @@ export class AuthService implements OnInit {
 
   public isLocalStorageAvailable(): boolean {
     return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
-  }
-
-  logout() {
-    localStorage.clear();
-    this.http.get('http://127.0.0.1:8000/logout')
   }
 }
