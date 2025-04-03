@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 import { FormControl, Validators } from '@angular/forms';
 import Toastify from 'toastify-js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit {
   confirm_icon:string = 'assets/hide.svg'
   show_password_icon:boolean = false;
   confirm_show_password_icon:boolean = false;
+  warning:any;
 
   method:any = {
     name: 'Sign in',
@@ -26,7 +28,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private http:HttpClient ,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: Router
   ){}
   ngOnInit(): void {
     // console.log(localStorage.getItem('name'))
@@ -37,9 +40,17 @@ export class LoginComponent implements OnInit {
         if(this.authService.isLocalStorageAvailable()) {
           localStorage.setItem('name', response['name'])
           localStorage.setItem('uid' , response['uid'])
+          localStorage.setItem('islogin', JSON.stringify(true))
+
+          this.route.navigate(['/home']).then(() => {
+            window.location.reload();
+          });
         }
       },
-      error: (error) => console.error('Login failed', error)
+      error: (error) => {
+        alert('⚠️ Unable to login, Please try again')
+        console.error('Login failed', error)
+      }
     });
   }
 
@@ -50,25 +61,26 @@ export class LoginComponent implements OnInit {
           name: 'Sign in',
           button_text: 'Sign'
         }
-        Toastify({
-          text: "✅ Reset mail sent sucessfully.",
-          duration: 5000,
-          close: true,
-          gravity: "top",
-          position: "center",
-          style: {
-            background: "rgb(235, 252, 236)",
-            color: "black",
-            "height": "30px",
-            "max-width": "300px",
-            "text-align": "center",
-            "border-radius": " 8px",
-            "margin": "auto",
-            "margin-top": "5px",
-            "left": "50%",
-            "transform": "translateX(-50%)"
-          }
-        }).showToast();
+        alert("✅ Reset mail sent sucessfully.")
+        // Toastify({
+        //   text: "✅ Reset mail sent sucessfully.",
+        //   duration: 5000,
+        //   close: true,
+        //   gravity: "top",
+        //   position: "center",
+        //   style: {
+        //     background: "rgb(235, 252, 236)",
+        //     color: "black",
+        //     "height": "30px",
+        //     "max-width": "300px",
+        //     "text-align": "center",
+        //     "border-radius": " 8px",
+        //     "margin": "auto",
+        //     "margin-top": "5px",
+        //     "left": "50%",
+        //     "transform": "translateX(-50%)"
+        //   }
+        // }).showToast();
       },
       error: (error)=> console.log(error)
     })
@@ -77,74 +89,28 @@ export class LoginComponent implements OnInit {
   register(email:any , password:any , confirm_password:any){
     if(password === confirm_password){
       this.http.post('http://127.0.0.1:8000/register', {email , password}).subscribe({
-        next: (response)=> {
-          Toastify({
-            text: "✅ sucessfully Registered.",
-            duration: 5000,
-            close: true,
-            gravity: "top",
-            position: "center",
-            style: {
-              background: "rgb(235, 252, 236)",
-              color: "black",
-              "height": "30px",
-              "max-width": "300px",
-              "text-align": "center",
-              "border-radius": " 8px",
-              "margin": "auto",
-              "margin-top": "5px",
-              "left": "50%",
-              "transform": "translateX(-50%)"
-            }
-          }).showToast();
+        next: (response:any)=> {
           this.method={
             name: 'Sign in',
             button_text: 'Sign'
           }
+          if(this.authService.isLocalStorageAvailable()) {
+            localStorage.setItem('name', response['name'])
+            localStorage.setItem('uid' , response['uid'])
+            localStorage.setItem('islogin', JSON.stringify(true))
+  
+            this.route.navigate(['/home']).then(() => {
+              window.location.reload();
+            });
+          }
         },
         error: (error)=> {
-          Toastify({
-            text: "⚠️ User already exists.",
-            duration: 5000,
-            close: true,
-            gravity: "top",
-            position: "center",
-            style:{
-              background: "rgb(252, 235, 235)",
-              color: "black",
-              "height": "30px",
-              "max-width": "300px",
-              "text-align": "center",
-              "border-radius": " 8px",
-              "margin": "auto",
-              "margin-top": "5px",
-              "left": "50%",
-              "transform": "translateX(-50%)"
-            }
-          }).showToast();
+          alert('⚠️ User already Exist')
         }
       })
     }
     else{
-      Toastify({
-        text: "⚠️ Both passwords must be equal.",
-        duration: 5000,
-        close: true,
-        gravity: "top",
-        position: "center",
-        style:{
-          background: "rgb(252, 235, 235)",
-          color: "black",
-          "height": "30px",
-          "max-width": "300px",
-          "text-align": "center",
-          "border-radius": " 8px",
-          "margin": "auto",
-          "margin-top": "5px",
-          "left": "50%",
-          "transform": "translateX(-50%)"
-        }
-      }).showToast();
+      alert('⚠️ Both passwords must be same')
     }
   }
 
@@ -154,10 +120,6 @@ export class LoginComponent implements OnInit {
 
   githubLogin(){
     this.authService.githubLogin();
-  }
-
-  logout(){
-    this.authService.logout();
   }
 
   sign(){

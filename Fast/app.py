@@ -65,7 +65,8 @@ def register(data: RegisterRequest):
     try:
         user = auth.create_user_with_email_and_password(data.email, data.password)
         decoded_token = auth_admin.verify_id_token(user.get("idToken"))
-        return decoded_token
+        name = decoded_token['email'].split("@")[0]
+        return {"name": name, "uid": decoded_token["uid"]}
     except Exception as e:
         raise HTTPException(status_code=401, detail=str(e))
 

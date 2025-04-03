@@ -15,6 +15,9 @@ import { environment } from '../Environments/environment';
 import { ButtonComponent } from './baseComponents/button/button.component';
 import { PredictionComponent } from "./Components/prediction/prediction.component";
 import { PreviousPredictionComponent } from './Components/previous-prediction/previous-prediction.component';
+import { NavbarComponent } from './Components/navbar/navbar.component';
+import { HomeComponent } from './Components/home/home.component';
+import { AboutComponent } from './Components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { PreviousPredictionComponent } from './Components/previous-prediction/pr
     LoginComponent,
     ButtonComponent,
     PredictionComponent,
-    PreviousPredictionComponent
+    PreviousPredictionComponent,
+    NavbarComponent,
+    HomeComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

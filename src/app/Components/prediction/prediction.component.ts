@@ -30,7 +30,14 @@ export class PredictionComponent implements OnInit {
   polar_chartData: any;
   polar_chartOptions: any;
 
+  islogin:boolean = false;
+
   ngOnInit(): void {
+    if(this.auth_service.isLocalStorageAvailable())
+    {
+      this.islogin = localStorage.getItem('islogin') == 'true'
+    }
+
     this.prediction_form = this.fb.group({
       a1: ['', Validators.required],
         a2: ['', Validators.required],

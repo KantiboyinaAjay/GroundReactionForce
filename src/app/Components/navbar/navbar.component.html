@@ -1,0 +1,27 @@
+<nav class="flex bg-blue-600 text-white p-4 shadow-md w-full">
+    <div class="w-full text-2xl font-bold">GRF Analyzer</div>
+    <div class="container mx-auto flex justify-end items-center gap-5">
+  
+      <ul class="hidden md:flex space-x-6">
+        <li><a routerLink="/home" routerLinkActive="border-b-2 border-white" class="hover:border-b-2 border-white">Home</a></li>
+        <li><a routerLink="/about" routerLinkActive="border-b-2 border-white" class="hover:border-b-2 border-white">About</a></li>
+        <li><a routerLink="/predict" routerLinkActive="border-b-2 border-white" class="hover:border-b-2 border-white">Prediction</a></li>
+        <li><a  routerLink="/previous-prediction" routerLinkActive="border-b-2 border-white" class="hover:border-b-2 border-white">Previous Prediction</a></li>
+        <li *ngIf="!islogin"><a href="/login" routerLinkActive="border-b-2 border-white" class="hover:border-b-2 border-white">Login</a></li>
+      </ul>
+      
+      @if (islogin) {
+        <div class="relative">
+        <button (click)="toggleDropdown()" class="focus:outline-none">
+            <img src="assets/profile.svg" alt="Profile" class="w-10 h-10 rounded-full border-2 border-white cursor-pointer">
+        </button>
+    
+        <div *ngIf="isDropdownOpen" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
+            <div class="p-4 text-gray-800 border-b">{{username}}</div>
+            <button class="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer" (click)="logout()">Logout</button>
+        </div>
+        </div>
+      }
+    </div>
+  </nav>
+  

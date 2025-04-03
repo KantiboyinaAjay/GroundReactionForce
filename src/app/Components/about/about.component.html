@@ -1,0 +1,118 @@
+<app-navbar/>
+<div class="container mx-auto p-6">
+    <h1 class="text-4xl font-bold text-center text-blue-600 mb-6">GRF ANN</h1>
+  
+    <!-- Why It Will Be Used? -->
+    <div class="bg-gray-100 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-2xl font-semibold text-gray-700">🔍 Revolutionizing GRF Measurement</h2>
+      <div class="flex">
+        <div>
+          <p class="text-gray-600 mt-2">
+            Ground Reaction Force (GRF) is a crucial metric in biomechanics, sports science, and injury prevention. 
+            It is traditionally measured using expensive force plates in laboratory settings. However, not everyone 
+            has access to these high-cost tools. The GRF Artificial Neural Network (ANN) project aims to solve this 
+            problem by using <b>wearable sensors</b> and <b>machine learning models</b> to estimate GRF in real-time, without the 
+            need for force plates.
+          </p>
+          <ul class="list-disc list-inside mt-4 text-gray-700">
+            <li>✅ Eliminates the need for force plates</li>
+            <li>✅ Provides cost-effective motion analysis</li>
+            <li>✅ Enables real-time GRF prediction</li>
+            <li>✅ Allows outdoor usage in real-world conditions</li>
+          </ul>
+        </div>
+        <img src="assets/walk.jpg" class="h-50 w-2/4 rounded-md border border-gray-300" alt="walk">
+      </div>
+    </div>
+  
+    <!-- How Is It Useful? -->
+    <div class="bg-gray-100 p-6 rounded-lg shadow-lg mb-6">
+      <h2 class="text-2xl font-semibold text-gray-700">📈 Key Benefits & Applications</h2>
+      <p class="text-gray-600 mt-2">
+        The GRF ANN system benefits a wide range of users in sports, healthcare, and research.
+        By providing <b>accurate GRF estimates</b> without force plates, it enables real-time <b>performance analysis</b> and <b>injury prevention</b>.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div class="p-4 bg-white rounded-lg shadow-md">
+          <h3 class="text-lg font-semibold text-blue-500">🏃‍♂️ Athletes & Runners</h3>
+          <p class="text-gray-600">Monitor foot impact forces to optimize performance and reduce injury risk.</p>
+        </div>
+        <div class="p-4 bg-white rounded-lg shadow-md">
+          <h3 class="text-lg font-semibold text-blue-500">👟 Coaches & Trainers</h3>
+          <p class="text-gray-600">Analyze running mechanics and improve training strategies for athletes.</p>
+        </div>
+        <div class="p-4 bg-white rounded-lg shadow-md">
+          <h3 class="text-lg font-semibold text-blue-500">🦿 Physiotherapists</h3>
+          <p class="text-gray-600">Evaluate patient recovery post-injury using detailed biomechanical data.</p>
+        </div>
+        <div class="p-4 bg-white rounded-lg shadow-md">
+          <h3 class="text-lg font-semibold text-blue-500">📊 Researchers</h3>
+          <p class="text-gray-600">Provide an affordable alternative to force plates for studying biomechanics.</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Process -->
+    <div class="bg-gray-100 p-6 rounded-lg shadow-lg">
+      <h2 class="text-2xl font-semibold text-gray-700">🔄 Process</h2>
+      
+      <!-- Step 1 -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold text-blue-500">🛠 Step 1: Data Collection</h3>
+        <div class="flex">
+          <p class="text-gray-600">
+            The system uses <b>IMU (Inertial Measurement Unit) sensors</b>, such as the <b>MPU-6050</b>, 
+            which are placed on a shoe or lower leg. These sensors collect data on acceleration, 
+            gyroscopic movement, and orientation to track motion in 3D space.
+          </p>
+          <img src="assets/sensor.png" alt="sensor" class="h-20 w-50 rounded-md border border-gray-300 hover:h-40 w-40 transition-all">
+        </div>
+      </div>
+  
+      <!-- Step 2 -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold text-blue-500">📡 Step 2: Wireless Data Transmission</h3>
+        <div class="flex">
+          <p class="text-gray-600">
+            The sensor data is transmitted to a central processing unit using <b>ESP32</b>, a Wi-Fi-enabled microcontroller.
+            The data is sent via <b>Wi-Fi</b> or <b>Bluetooth</b> to a cloud server or a local system for analysis.
+          </p>
+          <img src="assets/microController.png" alt="microcontroller" class="h-20 w-30 rounded-md border border-gray-300 hover:h-40 w-50 transition-all">
+        </div>
+      </div>
+  
+      <!-- Step 3 -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold text-blue-500">🧠 Step 3: AI-Based GRF Prediction</h3>
+        <p class="text-gray-600">
+          A <b>trained Artificial Neural Network (ANN)</b> processes the motion data to estimate the <b>Ground Reaction Forces (GRF)</b>.
+          The ANN model is trained using data from real force plates, allowing it to make accurate predictions.
+        </p>
+        <ul class="list-disc list-inside text-gray-700 mt-2">
+          <li>✅ <b>Vertical GRF (Z-axis)</b>: Measures landing impact</li>
+          <li>✅ <b>Anteroposterior GRF (X-axis)</b>: Measures braking and propulsion forces</li>
+          <li>✅ <b>Mediolateral GRF (Y-axis)</b>: Measures stability during movement</li>
+        </ul>
+      </div>
+  
+      <!-- Step 4 -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold text-blue-500">🌍 Step 4: Web-Based Visualization</h3>
+        <p class="text-gray-600">
+          The processed GRF values are displayed in <b>real-time on a web application</b>. 
+          The system provides graphs, numerical values, and performance feedback.
+        </p>
+      </div>
+  
+      <!-- Step 5 -->
+      <div class="mt-4">
+        <h3 class="text-lg font-semibold text-blue-500">🔄 Step 5: Feedback & Optimization</h3>
+        <p class="text-gray-600">
+          The user receives <b>instant feedback</b> on running efficiency, foot strike patterns, 
+          and impact forces. This helps in making immediate adjustments to improve performance 
+          and reduce injury risks.
+        </p>
+      </div>
+    </div>
+</div>
+  
