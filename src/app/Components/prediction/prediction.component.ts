@@ -14,6 +14,8 @@ export class PredictionComponent implements OnInit {
   sessionData: any;
   output_prediction!: FormGroup
   ouput_visible:boolean = false
+  feedback:any = []
+  injuries:any = []
 
   constructor(
     private auth_service: AuthService,
@@ -129,6 +131,9 @@ export class PredictionComponent implements OnInit {
             grfy: response['grfy'].toFixed(4),
             grfz: response['grfz'].toFixed(4)
           })
+
+          this.feedback = response['feedback']
+          this.injuries = response['injuries']
 
           this.line_chartData.datasets[0].data = [response['grfx'].toFixed(4) , response['grfy'].toFixed(4) , response['grfz'].toFixed(4)]
           this.pie_chartData.datasets[0].data = [response['grfx'].toFixed(4) , response['grfy'].toFixed(4) , response['grfz'].toFixed(4)]

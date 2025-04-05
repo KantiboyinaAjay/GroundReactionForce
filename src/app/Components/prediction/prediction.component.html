@@ -23,29 +23,57 @@
                 <div class="flex flex-col items-center my-2">
                     <button class="bg-blue-500 px-4 py-2 my-4 text-white rounded-lg shadow-md hover:bg-blue-400 transition cursor-pointer"
                         (click)="ouput_visible = !ouput_visible">
-                        New Prediction
+                        🔄 New Prediction
                     </button>
-                    <h2 class="text-xl font-semibold text-gray-800 mt-4">Prediction Results</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mt-4">📊 GRF Prediction Results</h2>
                     <form [formGroup]="output_prediction" class="bg-gray-50 shadow-md rounded-lg p-6 mt-4 w-full">
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div>
-                                <label class="block font-medium text-gray-700">GRF-X</label>
+                                <label class="block font-medium text-gray-700">GRF-X (Lateral)</label>
                                 <p class="p-3 border border-gray-400 bg-gray-100 rounded-md">{{output_prediction.get('grfx')?.value}}</p>
                             </div>
                             <div>
-                                <label class="block font-medium text-gray-700">GRF-Y</label>
+                                <label class="block font-medium text-gray-700">GRF-Y (Anteroposterior)</label>
                                 <p class="p-3 border border-gray-400 bg-gray-100 rounded-md">{{output_prediction.get('grfy')?.value}}</p>
                             </div>
                             <div>
-                                <label class="block font-medium text-gray-700">GRF-Z</label>
+                                <label class="block font-medium text-gray-700">GRF-Z (Vertical)</label>
                                 <p class="p-3 border border-gray-400 bg-gray-100 rounded-md">{{output_prediction.get('grfz')?.value}}</p>
                             </div>
+                        </div>
+                    </form>
+                    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-2">🧠 AI Feedback</h2>
+                    <form class="bg-green-50 border border-green-200 rounded-xl p-6 w-full">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div *ngFor="let item of feedback">
+                                <p class="p-3 border border-green-300 bg-white rounded-md">🔸 {{ item }}</p>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Injury Risks -->
+                    <h2 class="text-2xl font-bold text-red-700 mt-8 mb-2">🩺 Potential Injury Risks</h2>
+                    <form class="bg-red-50 border border-red-200 rounded-xl p-6 w-full">
+                        <div class="grid grid-cols-1 gap-4">
+                            @if (injuries.length === 1) {
+                                <div>
+                                    <p class="p-3 border border-red-300 bg-white rounded-md">{{ injuries[0] }}</p>
+                                </div>
+                            }
+                            @else {
+                                <div *ngFor="let item of injuries" class="p-3 border border-red-300 bg-white rounded-md">
+                                    <h3 class="text-red-800 font-semibold mb-1">{{ item.split(':')[0] }}</h3>
+                                    <ul class="list-disc list-inside text-red-600 ml-4">
+                                        <li>{{ item.split(':')[1] }}</li>
+                                    </ul>
+                                </div>
+                            }
                         </div>
                     </form>
 
                     <!-- Charts -->
                     <div class="w-full mt-6">
-                        <h3 class="text-center text-lg font-semibold text-gray-800 mb-4">Visualization</h3>
+                        <h3 class="text-center text-lg font-semibold text-gray-800 mb-4">📈 GRF Visualizations</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="col-span-2">
                                 <h3 class="text-center text-gray-800 font-medium mb-2">Line Chart</h3>

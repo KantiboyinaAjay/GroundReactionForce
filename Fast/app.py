@@ -12,12 +12,8 @@ from firebase_admin import auth as auth_admin, credentials, firestore
 from dotenv import load_dotenv
 from pymongo import MongoClient
 
-# import tensorflow as tf
-# import pandas as pd
-# from sklearn.preprocessing import MinMaxScaler
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from models.data_predict import predict_grf
-# from Fast.models.data_train import train
+from models.data_predict import predict_grf, grf_feedback
 
 load_dotenv()
 app = FastAPI()
@@ -115,19 +111,19 @@ async def google_auth(request: Request):
     
 @app.post("/predict")
 async def prediction(data: PredictionRequest):
-    # grfx = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a1)
-    # grfy = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a2)
-    # grfz = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a3)
-    # store_prediction(data.uid, float(data.a1), float(data.a2), float(data.a3), float(data.v1), float(data.v2), float(data.v3), grfx, grfy, grfz)
-    # return {"grfx": grfx, "grfy": grfy, "grfz": grfz}
     prediction_result =  predict_grf(float(data.a1), float(data.a2), float(data.a3) , float(data.v1) , float(data.v2) , float(data.v3))
     
     grfx = prediction_result['GRF_V']
     grfy = prediction_result['GRF_AP']
     grfz = prediction_result['GRF_ML']
     
+    store_feed = grf_feedback(grfx , grfy , grfz)
+    feedback = store_feed['feedback']
+    injuries = store_feed['injury_risks']
+
+    # print(f"the feedback ==> {feedback} and the \n injuries ===> {injuries}")
     store_prediction(data.uid, float(data.a1), float(data.a2), float(data.a3), float(data.v1), float(data.v2), float(data.v3), grfx, grfy, grfz)
-    return {"grfx": grfx, "grfy": grfy, "grfz": grfz}
+    return {"grfx": grfx, "grfy": grfy, "grfz": grfz , 'feedback': feedback, 'injuries': injuries}
 
 def store_prediction(uid, a1, a2, a3, v1, v2, v3, grfx, grfy, grfz):
     entry = {"a1": a1, "a2": a2, "a3": a3, "v1": v1, "v2": v2, "v3": v3, "grfx": grfx, "grfy": grfy, "grfz": grfz}
