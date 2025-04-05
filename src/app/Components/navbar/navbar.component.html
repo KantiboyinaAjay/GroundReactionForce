@@ -17,8 +17,8 @@
         </button>
     
         <div *ngIf="isDropdownOpen" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg">
-            <div class="p-4 text-gray-800 border-b">{{username}}</div>
-            <button class="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer" (click)="logout()">Logout</button>
+            <div class="p-4 text-gray-800 border-b border-gray-200 truncate hover:overflow-visible">👤 {{username}}</div>
+            <button class="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 cursor-pointer" (click)="logout()">🏃‍♂️Logout</button>
         </div>
         </div>
       }
