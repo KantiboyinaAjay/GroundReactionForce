@@ -26,7 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-mongo_client = MongoClient("mongodb+srv://ajaykantiboyina:Ajay%406203@cluster0.vleuyp5.mongodb.net/Prediction")
+mongo_client = MongoClient(os.getenv("DATABASEurl"))
 db = mongo_client.Prediction
 
 firebase_config = json.loads(os.getenv("FIREBASE_CONFIG"))
