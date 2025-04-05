@@ -14,6 +14,8 @@ export class PredictionComponent implements OnInit {
   sessionData: any;
   output_prediction!: FormGroup
   ouput_visible:boolean = false
+  feedback:any = []
+  injuries:any = []
 
   constructor(
     private auth_service: AuthService,
@@ -125,14 +127,17 @@ export class PredictionComponent implements OnInit {
       this.http.post('http://127.0.0.1:8000/predict', this.prediction_form.value).subscribe({
         next: (response:any) => {
           this.output_prediction.patchValue({
-            grfx: response['grfx'].toFixed(4),
-            grfy: response['grfy'].toFixed(4),
-            grfz: response['grfz'].toFixed(4)
+            grfx: response['grfx'].toFixed(2),
+            grfy: response['grfy'].toFixed(2),
+            grfz: response['grfz'].toFixed(2)
           })
 
-          this.line_chartData.datasets[0].data = [response['grfx'].toFixed(4) , response['grfy'].toFixed(4) , response['grfz'].toFixed(4)]
-          this.pie_chartData.datasets[0].data = [response['grfx'].toFixed(4) , response['grfy'].toFixed(4) , response['grfz'].toFixed(4)]
-          this.polar_chartData.datasets[0].data = [response['grfx'].toFixed(4) , response['grfy'].toFixed(4) , response['grfz'].toFixed(4)]
+          this.feedback = response['feedback']
+          this.injuries = response['injuries']
+
+          this.line_chartData.datasets[0].data = [response['grfx'].toFixed(2) , response['grfy'].toFixed(2) , response['grfz'].toFixed(2)]
+          this.pie_chartData.datasets[0].data = [response['grfx'].toFixed(2) , response['grfy'].toFixed(2) , response['grfz'].toFixed(2)]
+          this.polar_chartData.datasets[0].data = [response['grfx'].toFixed(2) , response['grfy'].toFixed(2) , response['grfz'].toFixed(2)]
           this.ouput_visible = true;
         },
         error: (error) => console.error('error : ', error)
