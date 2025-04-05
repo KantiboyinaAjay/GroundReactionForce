@@ -42,7 +42,7 @@
                             </div>
                         </div>
                     </form>
-                    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-2">🧠 AI Feedback</h2>
+                    <h2 class="text-2xl font-bold text-gray-800 mt-8 mb-2">✨ AI Feedback</h2>
                     <form class="bg-green-50 border border-green-200 rounded-xl p-6 w-full">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div *ngFor="let item of feedback">
@@ -93,12 +93,12 @@
             }
             @else {
                 <div class="flex flex-col items-center">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Enter IMU Data</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">📥 Enter IMU Data</h2>
                     <form [formGroup]="prediction_form" (ngSubmit)="onSubmit()" class="bg-white shadow-lg rounded-lg p-6 w-full">
                         
                         <!-- Acceleration Inputs -->
                         <div class="mb-4">
-                            <label class="block font-medium text-gray-700">Acceleration (m/s²)</label>
+                            <label class="block font-medium text-gray-700">⚡ Acceleration (m/s²)</label>
                             <div class="grid grid-cols-3 gap-4 mt-2">
                                 <input formControlName="a1" type="text" placeholder="X-Axis"
                                     class="border border-gray-400 rounded-md px-3 py-2 focus:ring focus:ring-indigo-300">
@@ -111,7 +111,7 @@
 
                         <!-- Angular Velocity Inputs -->
                         <div class="mb-4">
-                            <label class="block font-medium text-gray-700">Angular Velocity (rad/s)</label>
+                            <label class="block font-medium text-gray-700">🌀 Angular Velocity (rad/s)</label>
                             <div class="grid grid-cols-3 gap-4 mt-2">
                                 <input formControlName="v1" type="text" placeholder="X-Axis"
                                     class="border border-gray-400 rounded-md px-3 py-2 focus:ring focus:ring-indigo-300">
