@@ -1,10 +1,13 @@
-# python=3.10.13
-# tensorflow=2.10.0
-# numpy=1.26.4
-# pyrebase4
-# fastapi
-# firebase_admin
-# dotenv
-# pymongo
-# scikit-learn
-# pip install protobuf==3.20.*
+python==3.10.13
+tensorflow
+numpy
+pyrebase4
+fastapi
+firebase_admin
+dotenv
+uvicorn
+pymongo
+scikit-learn
+protobuf==3.20.*
+python-dotenv
+scipy
