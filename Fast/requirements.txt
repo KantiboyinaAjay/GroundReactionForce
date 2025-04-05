@@ -1,5 +1,6 @@
 tensorflow
 numpy
+pandas
 pyrebase4
 fastapi
 firebase_admin
