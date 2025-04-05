@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict, Any
 import os
+import sys
 import json
 import math
 import pyrebase
@@ -10,6 +11,13 @@ import firebase_admin
 from firebase_admin import auth as auth_admin, credentials, firestore
 from dotenv import load_dotenv
 from pymongo import MongoClient
+
+# import tensorflow as tf
+# import pandas as pd
+# from sklearn.preprocessing import MinMaxScaler
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from models.data_predict import predict_grf
+# from Fast.models.data_train import train
 
 load_dotenv()
 app = FastAPI()
@@ -27,7 +35,7 @@ db = mongo_client.Prediction
 
 firebase_config = json.loads(os.getenv("FIREBASE_CONFIG"))
 firebase = pyrebase.initialize_app(firebase_config)
-cred = credentials.Certificate("./grf-project-b6824-firebase-adminsdk-fbsvc-ac4cc9e271.json")
+cred = credentials.Certificate(r"./grf-project-b6824-firebase-adminsdk-fbsvc-ac4cc9e271.json")
 firebase_admin.initialize_app(cred)
 auth = firebase.auth()
 fire_db = firestore.client()
@@ -49,6 +57,7 @@ class PredictionRequest(BaseModel):
     v3: str
     uid: str
 
+# train()
 # Routes
 @app.post("/login")
 def login(data: LoginRequest):
@@ -105,10 +114,18 @@ async def google_auth(request: Request):
         raise HTTPException(status_code=401, detail=str(e))
     
 @app.post("/predict")
-def prediction(data: PredictionRequest):
-    grfx = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a1)
-    grfy = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a2)
-    grfz = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a3)
+async def prediction(data: PredictionRequest):
+    # grfx = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a1)
+    # grfy = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a2)
+    # grfz = (float(data.a1) + float(data.a2) + float(data.a3) + float(data.v1) + float(data.v2) + float(data.v3)) / float(data.a3)
+    # store_prediction(data.uid, float(data.a1), float(data.a2), float(data.a3), float(data.v1), float(data.v2), float(data.v3), grfx, grfy, grfz)
+    # return {"grfx": grfx, "grfy": grfy, "grfz": grfz}
+    prediction_result =  predict_grf(float(data.a1), float(data.a2), float(data.a3) , float(data.v1) , float(data.v2) , float(data.v3))
+    
+    grfx = prediction_result['GRF_V']
+    grfy = prediction_result['GRF_AP']
+    grfz = prediction_result['GRF_ML']
+    
     store_prediction(data.uid, float(data.a1), float(data.a2), float(data.a3), float(data.v1), float(data.v2), float(data.v3), grfx, grfy, grfz)
     return {"grfx": grfx, "grfy": grfy, "grfz": grfz}
 
@@ -132,6 +149,3 @@ def retrieve_predictions(request: Request):
     paginated_entries = entries[start:end]
     
     return {"start": start, "end": end, "total": total, "paginated_entries": paginated_entries, "entries": entries}
-
-# if __name__ == "__main__":
-#     uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
