@@ -21,11 +21,10 @@ scaler_X.fit(X_train)
 scaler_y.fit(y_train)
 
 # Load trained ANN model
-model_path = "../final_grf_prediction_model.h5"
-model = tf.keras.models.load_model(model_path)
+base_dir = os.path.dirname(os.path.dirname(__file__))
+model_path = os.path.join(base_dir, "final_grf_prediction_model.h5")
+model = tf.keras.models.load_model(model_path, compile=False)
 
-# train()
-# Prediction function
 def predict_grf(acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z):
     input_values = np.array([[float(acc_x), float(acc_y), float(acc_z), float(gyro_x), float(gyro_y), float(gyro_z)]])
     
@@ -78,11 +77,3 @@ def grf_feedback(v_grf, ap_grf, ml_grf):
         "feedback": feedback if feedback else ["GRF values are within an optimal range."],
         "injury_risks": injuries if injuries else ["No significant injury risks detected."]
     }
-
-# print("\nFeedback:")
-# for fb in result["feedback"]:
-#     print("- " + fb)
-
-# print("\nPotential Injury Risks:")
-# for risk in result["injury_risks"]:
-#     print("- " + risk)
