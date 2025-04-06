@@ -14,6 +14,7 @@ from pymongo import MongoClient
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from models.data_predict import predict_grf, grf_feedback
+from models.data_train import train
 
 load_dotenv()
 app = FastAPI()
@@ -53,7 +54,7 @@ class PredictionRequest(BaseModel):
     v3: str
     uid: str
 
-# train()
+train()
 # Routes
 @app.post("/login")
 def login(data: LoginRequest):
