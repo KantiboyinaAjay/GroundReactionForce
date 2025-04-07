@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "postinstall": "node ./set-executable.js",
+    "postinstall": "npm install jiti && node ./set-executable.js",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
