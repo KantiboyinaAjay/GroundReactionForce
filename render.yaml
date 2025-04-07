@@ -1,6 +1,0 @@
-services:
-  - type: web
-    name: angular-grf
-    env: static
-    staticPublishPath: dist/GroundReactionForce
-    buildCommand: npm install && npm run build
