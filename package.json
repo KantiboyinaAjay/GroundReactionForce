@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "npx ng serve",
-    "build": "node ./node_modules/@angular/cli/bin/ng build",
+    "build": "npx ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:Angular_Grf": "node dist/angular-grf/server/server.mjs"
