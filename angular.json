@@ -95,6 +95,20 @@
             "scripts": []
           }
         }
+      },
+      "prerender": {
+        "builder": "@angular-devkit/build-angular:prerender",
+        "options": {
+          "browserTarget": "angular-grf:build:production",
+          "serverTarget": "angular-grf:server:production",
+          "routes": [
+            "/", 
+            "/home", 
+            "/predict",
+            "/about",
+            "/login"
+          ]
+        }
       }
     }
   },
