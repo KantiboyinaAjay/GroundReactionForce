@@ -57,7 +57,7 @@ class PredictionRequest(BaseModel):
     v3: str
     uid: str
 
-train()
+# train()
 # Routes
 @app.post("/login")
 def login(data: LoginRequest):
