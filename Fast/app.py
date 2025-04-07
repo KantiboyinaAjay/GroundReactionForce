@@ -32,7 +32,10 @@ db = mongo_client.Prediction
 
 firebase_config = json.loads(os.getenv("FIREBASE_CONFIG"))
 firebase = pyrebase.initialize_app(firebase_config)
-cred = credentials.Certificate(r"./grf-project-b6824-firebase-adminsdk-fbsvc-ac4cc9e271.json")
+
+file_firebase_admin_sdk = json.loads(os.getenv("FIREBASE_ADMIN_SDK"))
+cred = credentials.Certificate(file_firebase_admin_sdk)
+# cred = credentials.Certificate(r"./grf-project-b6824-firebase-adminsdk-fbsvc-ac4cc9e271.json")
 firebase_admin.initialize_app(cred)
 auth = firebase.auth()
 fire_db = firestore.client()
@@ -143,6 +146,7 @@ def retrieve_predictions(request: Request):
     total = math.ceil(len(entries) / limit)
     start = (page - 1) * limit
     end = start + limit
+    entries = entries[::-1]
     paginated_entries = entries[start:end]
     
     return {"start": start, "end": end, "total": total, "paginated_entries": paginated_entries, "entries": entries}
