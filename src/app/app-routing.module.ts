@@ -11,7 +11,7 @@ import { NavbarComponent } from './Components/navbar/navbar.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'predict', component: PredictionComponent},
-  { path: 'previous-prediction', component: PreviousPredictionComponent},
+  { path: 'previous-prediction', component: PreviousPredictionComponent , data: { skipPrerender: true }},
   { path: 'home', component: HomeComponent},
   { path: 'about', component: AboutComponent},
   { path: 'login', component: LoginComponent}
