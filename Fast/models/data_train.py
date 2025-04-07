@@ -45,7 +45,7 @@ def train():
     checkpoint = tf.keras.callbacks.ModelCheckpoint("best_grf_model.h5", monitor="val_loss", save_best_only=True, mode="min")
 
     # Train Model Efficiently
-    history = model.fit(X_scaled, y_scaled, epochs=1000, batch_size=256, validation_split=0.2, callbacks=[early_stop, checkpoint])
+    history = model.fit(X_scaled, y_scaled, epochs=10, batch_size=256, validation_split=0.2, callbacks=[early_stop, checkpoint])
 
     # Save Final Model
     model.save("final_grf_prediction_model.h5")
