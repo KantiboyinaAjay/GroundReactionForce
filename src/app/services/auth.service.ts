@@ -17,7 +17,7 @@ export class AuthService implements OnInit {
       console.log('Google User:', result.user);
       console.log('ID Token:', idToken);
 
-      await this.http.post('http://127.0.0.1:8000/auth/google', { idToken }).subscribe(
+      await this.http.post('https://groundreactionforce.onrender.com/auth/google', { idToken }).subscribe(
         (res:any) => {
           if(this.isLocalStorageAvailable()) {
             localStorage.setItem('name', res['name'])
@@ -41,7 +41,7 @@ export class AuthService implements OnInit {
       const result = await signInWithPopup(this.auth, provider);
       const idToken = await result.user.getIdToken();
 
-      await this.http.post('http://127.0.0.1:8000/auth/github', { idToken }).subscribe(
+      await this.http.post('https://groundreactionforce.onrender.com/auth/github', { idToken }).subscribe(
         (res:any) => {
           if(this.isLocalStorageAvailable()) {
             localStorage.setItem('name', res['name'])
