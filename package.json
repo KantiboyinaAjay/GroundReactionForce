@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "postinstall": "chmod +x ./node_modules/.bin/ng",
+    "postinstall": "node ./set-executable.js",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.1.5",
-    "@angular/cli": "^19.1.5",
+    "@angular/cli": "^19.2.6",
     "@angular/compiler-cli": "^19.1.0",
     "@types/express": "^4.17.17",
     "@types/firebase": "^3.2.3",
