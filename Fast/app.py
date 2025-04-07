@@ -150,3 +150,6 @@ def retrieve_predictions(request: Request):
     paginated_entries = entries[start:end]
     
     return {"start": start, "end": end, "total": total, "paginated_entries": paginated_entries, "entries": entries}
+
+
+# "serve:ssr:Angular_Grf": "node dist/angular-grf/server/server.mjs"
