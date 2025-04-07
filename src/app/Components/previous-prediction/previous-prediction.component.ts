@@ -144,9 +144,9 @@ export class PreviousPredictionComponent implements OnInit {
     }
   }
 
-  async loadPredictions() {
+  loadPredictions() {
     let uid = this.auth.isLocalStorageAvailable() ? localStorage.getItem('uid') : ''
-    await this.http.get<any>(`https://groundreactionforce.onrender.com/get_predictions?page=${this.page}&limit=${this.limit}&uid=${uid}`).subscribe(
+    this.http.get<any>(`https://groundreactionforce.onrender.com/get_predictions?page=${this.page}&limit=${this.limit}&uid=${uid}`).subscribe(
       async (res)=> {
         this.predictions = await res.paginated_entries
         this.totalPages = res.total
@@ -154,7 +154,7 @@ export class PreviousPredictionComponent implements OnInit {
         this.isdata = res.entries.length === 0
 
         let grfx = 0 , grfy = 0 , grfz = 0 , count = this.total_entries.length
-        await this.total_entries.map((item) => {
+        this.total_entries.map((item) => {
           this.line_chartData.datasets[0].data.push(item.grfx)
           this.line_chartData.datasets[1].data.push(item.grfy)
           this.line_chartData.datasets[2].data.push(item.grfz)
