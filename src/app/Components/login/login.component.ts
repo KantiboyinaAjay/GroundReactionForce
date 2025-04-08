@@ -55,35 +55,7 @@ export class LoginComponent implements OnInit {
   }
 
   forgot(email:any){
-    this.http.post('http://127.0.0.1:8000/forgot', {email}).subscribe({
-      next: (response)=> {
-        this.method={
-          name: 'Sign in',
-          button_text: 'Sign'
-        }
-        alert("✅ Reset mail sent sucessfully.")
-        // Toastify({
-        //   text: "✅ Reset mail sent sucessfully.",
-        //   duration: 5000,
-        //   close: true,
-        //   gravity: "top",
-        //   position: "center",
-        //   style: {
-        //     background: "rgb(235, 252, 236)",
-        //     color: "black",
-        //     "height": "30px",
-        //     "max-width": "300px",
-        //     "text-align": "center",
-        //     "border-radius": " 8px",
-        //     "margin": "auto",
-        //     "margin-top": "5px",
-        //     "left": "50%",
-        //     "transform": "translateX(-50%)"
-        //   }
-        // }).showToast();
-      },
-      error: (error)=> console.log(error)
-    })
+    this.authService.sendResetPassword(email);
   }
 
   register(email:any , password:any , confirm_password:any){

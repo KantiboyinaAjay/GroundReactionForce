@@ -1,5 +1,5 @@
 import { Injectable , OnInit } from '@angular/core';
-import { Auth, signInWithPopup, GoogleAuthProvider, signOut, GithubAuthProvider } from '@angular/fire/auth';
+import { Auth, signInWithPopup, GoogleAuthProvider, signOut, GithubAuthProvider , sendPasswordResetEmail } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -9,6 +9,15 @@ export class AuthService implements OnInit {
   ngOnInit(): void {
     localStorage.clear();
   }
+  async sendResetPassword(email: string) {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+      alert('✅ Password reset email sent!');
+    } catch (error) {
+      console.error('Error sending reset email:', error);
+    }
+  }
+
   async googleLogin() {
     try {
       const provider = new GoogleAuthProvider();
