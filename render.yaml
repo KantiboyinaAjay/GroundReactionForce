@@ -1,2 +1,2 @@
-Build Command: /build.sh
+Build Command: npm run build
 Start Command: serve -s dist/angular-grf
