@@ -1,6 +1,8 @@
-import { Component , OnInit } from '@angular/core';
+import { Component , OnInit , Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { isPlatformBrowser } from '@angular/common';
+
 
 @Component({
   selector: 'app-previous-prediction',
@@ -33,9 +35,12 @@ export class PreviousPredictionComponent implements OnInit {
   isdata:boolean = false;
   islogin:boolean = false;
 
-  constructor(private http: HttpClient , private auth: AuthService) {}
+  constructor(private http: HttpClient , private auth: AuthService , @Inject(PLATFORM_ID) private platformId: Object) {}
 
   async ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadPredictions();
+    }
     this.isdata = true;
     this.line_chartData = {
       labels: ['GRF-X' , 'GRF-Y' , 'GRF-Z'],
