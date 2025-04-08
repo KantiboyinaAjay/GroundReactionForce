@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "http-server dist/Angular_Grf",
-    "build": "ng build --configuration production",
+    "start": "ng serve",
+    "build": "chmod +x ./node_modules/.bin/ng && ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

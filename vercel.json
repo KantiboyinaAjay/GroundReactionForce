@@ -1,5 +1,5 @@
 {
     "buildCommand": "npm run build",
-    "outputDirectory": "dist/angular-grf/browser"
+    "outputDirectory": "dist/angular-grf"
 }
   
