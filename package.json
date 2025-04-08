@@ -19,6 +19,7 @@
     "@angular/forms": "^19.2.5",
     "@angular/platform-browser": "^19.2.5",
     "@angular/platform-browser-dynamic": "^19.2.5",
+    "@netlify/angular-runtime": "^2.3.1",
     "@angular/router": "^19.2.5",
     "@tailwindcss/postcss": "^4.0.17",
     "chart.js": "^4.4.8",
