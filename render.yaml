@@ -1,2 +1,2 @@
 Build Command: "chmod +x ./node_modules/.bin/ng && ./node_modules/.bin/ng build --configuration production"
-Start Command: dist/angular-grf
+Start Command: ng serve
