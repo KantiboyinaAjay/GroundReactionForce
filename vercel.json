@@ -1,5 +1,5 @@
 {
-    "buildCommand": "chmod +x ./node_modules/.bin/ng && ./node_modules/.bin/ng build --configuration production",
-    "outputDirectory": "dist/angular-grf"
+    "buildCommand": "ng build --configuration production",
+    "outputDirectory": "dist/angular-grf/browser"
 }
   
